@@ -7,7 +7,7 @@
 
 ## Honest training gate (`logs/honest_training_results.json`)
 
-Measured 2026-09-20 17:46 UTC. Operating point: **0.85** (owner: `policy.py`). Promotion gate: **PASSED**.
+Measured 2026-09-20 13:46 (writer-local). Operating point: **0.85** (owner: `policy.py`). Promotion gate: **PASSED**.
 
 | Detector | Holdout TPR | Holdout FPR | Seated |
 |---|---|---|---|
@@ -20,7 +20,7 @@ Throughput: **447.7 evals/sec** (measured, not estimated).
 
 ## Adversarial stress benchmark (`logs/adversarial_stress_results.json`)
 
-Measured 2026-09-19 22:15 UTC. Every tier runs the attack mutant AND a benign pool; the FP column is the false-positive rate on that benign pool (tiers measured before that column existed show `n/a`).
+Measured 2026-09-19 18:15 (writer-local). Every tier runs the attack mutant AND a benign pool; the FP column is the false-positive rate on that benign pool (tiers measured before that column existed show `n/a`).
 
 | Tier | Intensity | Monolith detection | MoE detection | MoE FP |
 |---|---|---|---|---|

@@ -46,6 +46,13 @@ def fmt_ts(raw):
         dt = datetime.fromisoformat(str(raw))
     except ValueError:
         return str(raw)
+    # Artifacts are written with naive local timestamps (datetime.now()).
+    # Converting with astimezone() would assume the READER's local zone and
+    # render differently on a UTC CI runner than on the writer's machine,
+    # breaking doc freshness. Render deterministically: naive times carry no
+    # zone claim; only tz-aware stamps are converted to UTC.
+    if dt.tzinfo is None:
+        return dt.strftime("%Y-%m-%d %H:%M (writer-local)")
     return dt.astimezone(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
 
 
