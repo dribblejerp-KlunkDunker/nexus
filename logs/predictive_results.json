@@ -1,0 +1,21 @@
+{
+  "window": 30,
+  "horizon": 20,
+  "trained_on": "real capture timeline (data/corpus_v2.npz)",
+  "holdout": {
+    "all windows": {
+      "n": 3039,
+      "positives": 1126,
+      "tpr": 0.9626998223801065,
+      "fpr": 0.006272869837950863,
+      "auc": 0.9936561007744524
+    },
+    "clean windows only": {
+      "n": 1890,
+      "positives": 30,
+      "tpr": 0.0,
+      "fpr": 0.0,
+      "auc": 0.8333870967741935
+    }
+  }
+}

@@ -1,0 +1,25 @@
+venv/
+__pycache__/
+*.pyc
+logs/neat-checkpoint-*
+logs/test_evidence/
+data/*.db
+*.pcap
+**/*.pcap
+
+# node build tooling (runtime never needs it)
+node_modules/
+
+# test cache
+.pytest_cache/
+
+# genome vault signing key -- the one secret this repo must never carry
+config/genome_key.hex
+*.key
+
+# runtime event log (regenerated on every boot)
+logs/*.log
+
+# tailwind freshness-check temp output
+web/static/css/app.css.check
+web/static/css/app.css.check.map

@@ -1,0 +1,35 @@
+{
+  "_comment": "NEXUS Trusted Device, Subnet & Protocol Whitelist",
+  "enabled": true,
+  "subnets": [
+    "127.0.0.0/8",
+    "192.168.0.0/16",
+    "10.0.0.0/8",
+    "172.16.0.0/12",
+    "169.254.0.0/16",
+    "224.0.0.0/4",
+    "::1/128",
+    "fe80::/10",
+    "ff00::/8"
+  ],
+  "trusted_ips": [
+    "127.0.0.1",
+    "::1",
+    "0.0.0.0",
+    "255.255.255.255"
+  ],
+  "trusted_macs": [
+    "00:00:00:00:00:00",
+    "ff:ff:ff:ff:ff:ff"
+  ],
+  "trusted_ports": [
+    53,
+    67,
+    68,
+    123,
+    5353,
+    8000
+  ],
+  "bypass_multicast_and_broadcast": true,
+  "bypass_local_lan": true
+}

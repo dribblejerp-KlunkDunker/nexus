@@ -1,0 +1,65 @@
+{
+  "timestamp": "2026-09-19T16:19:03.785335",
+  "monolith_overall_accuracy": 90.38,
+  "moe_overall_accuracy": 100.0,
+  "monolith_latency_us": 3.67,
+  "moe_latency_us": 35.87,
+  "categories": [
+    {
+      "category": "Normal Web / TLS (Benign)",
+      "type": "NORMAL",
+      "monolith": 51.800000000000004,
+      "moe": 100.0,
+      "expert": "RECON_INQUISITOR"
+    },
+    {
+      "category": "Normal Media Stream (Benign)",
+      "type": "NORMAL",
+      "monolith": 100.0,
+      "moe": 100.0,
+      "expert": "RECON_INQUISITOR"
+    },
+    {
+      "category": "Volumetric SYN Flood",
+      "type": "ATTACK",
+      "monolith": 100.0,
+      "moe": 100.0,
+      "expert": "VOLUMETRIC_VANGUARD"
+    },
+    {
+      "category": "Stealth Flag Scans (XMAS/NULL/SF)",
+      "type": "ATTACK",
+      "monolith": 71.39999999999999,
+      "moe": 100.0,
+      "expert": "RECON_INQUISITOR"
+    },
+    {
+      "category": "High-Entropy Exploit / Shellcode",
+      "type": "ATTACK",
+      "monolith": 100.0,
+      "moe": 100.0,
+      "expert": "DEEP_PAYLOAD_ANALYST"
+    },
+    {
+      "category": "Cobalt Strike C2 Beacons",
+      "type": "ATTACK",
+      "monolith": 100.0,
+      "moe": 100.0,
+      "expert": "DEEP_PAYLOAD_ANALYST"
+    },
+    {
+      "category": "Stratum Cryptomining",
+      "type": "ATTACK",
+      "monolith": 100.0,
+      "moe": 100.0,
+      "expert": "DEEP_PAYLOAD_ANALYST"
+    },
+    {
+      "category": "Encrypted Data Exfiltration",
+      "type": "ATTACK",
+      "monolith": 99.8,
+      "moe": 100.0,
+      "expert": "DEEP_PAYLOAD_ANALYST"
+    }
+  ]
+}

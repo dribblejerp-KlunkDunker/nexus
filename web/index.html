@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>NEXUS // CYBER-GUARDIAN TACTICAL HUD</title>
+
+  <!-- Fonts & styles: fully self-hosted (offline-first). Rebuild with build_web.bat -->
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="./static/fonts/fonts.css">
+  <link rel="stylesheet" href="./static/css/app.css">
+
+</head>
+<body class="text-slate-200 min-h-screen flex flex-col antialiased selection:bg-laserCyan/30 selection:text-white">
+
+  <!-- TOP MILITARY HUD / TELEMETRY BANNER -->
+  <header class="border-b border-panelBorder bg-panel/90 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-[1600px] mx-auto px-4 py-2.5 flex flex-wrap items-center justify-between gap-4">
+      
+      <!-- Brand & Tactical Status -->
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded border border-laserCyan/40 bg-laserCyan/10 flex items-center justify-center text-laserCyan font-display font-black text-lg">
+          Ω
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-display font-extrabold text-base tracking-widest text-white">NEXUS</span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-laserCyan/10 text-laserCyan border border-laserCyan/30 font-semibold tracking-wider">DEFENSE HUD v2.4</span>
+            <button id="defense-mode-pill" data-action="toggledefensemode" title="Click to toggle between Safe Audit Mode and Live Windows Firewall Blocking" class="text-[10px] px-2 py-0.5 rounded bg-matrixGreen/10 hover:bg-matrixGreen/20 text-matrixGreen border border-matrixGreen/30 font-semibold tracking-wider transition cursor-pointer flex items-center gap-1.5">
+              <span id="defense-mode-dot" class="w-1.5 h-1.5 rounded-full bg-matrixGreen"></span>
+              <span id="defense-mode-label">ARMED (AUDIT / SAFE)</span>
+            </button>
+          </div>
+          <p class="text-[10px] text-textMuted tracking-tight">RFC 5961 PASSIVE FLOW TRACKING // NEAT NEUROEVOLUTION ENGINE</p>
+        </div>
+      </div>
+
+      <!-- MASTER LIVE CAPTURE SWITCH (PROMINENT & UNMISSABLE) -->
+      <div class="flex items-center gap-3 bg-panelLight px-3 py-1.5 rounded border border-panelBorder">
+        <div class="relative w-6 h-6 flex items-center justify-center">
+          <div id="radar-circle" class="w-6 h-6 rounded-full border border-slate-700"></div>
+          <div id="radar-indicator" class="w-2 h-2 rounded-full bg-slate-500"></div>
+        </div>
+        <div>
+          <div class="text-[10px] text-textMuted font-bold tracking-wider">NETWORK NIC CAPTURE:</div>
+          <div id="capture-status-text" class="text-xs font-bold text-slate-400">STANDBY (OFFLINE)</div>
+        </div>
+        <button id="master-capture-btn" data-action="togglelivecapture" title="Click to start/pause live packet sniffing from your physical Wi-Fi/Ethernet adapter" class="ml-2 px-3 py-1 rounded text-xs font-bold font-mono tracking-wider transition flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-600 cursor-pointer">
+          <span id="master-capture-label">ACTIVATE LIVE SNIFF</span>
+        </button>
+      </div>
+
+      <!-- Real-Time Throughput / Velocity Ticker -->
+      <div class="hidden xl:flex items-center gap-6 text-xs font-mono">
+        <div>
+          <span class="text-textMuted text-[10px] block">THROUGHPUT:</span>
+          <span id="velocity-pps" class="text-laserCyan font-bold">0</span> <span class="text-textMuted text-[10px]">PPS</span>
+        </div>
+        <div>
+          <span class="text-textMuted text-[10px] block">BANDWIDTH:</span>
+          <span id="velocity-kbps" class="text-white font-bold">0.0</span> <span class="text-textMuted text-[10px]">KB/s</span>
+        </div>
+        <div>
+          <span class="text-textMuted text-[10px] block">CHAMPION FITNESS:</span>
+          <span id="champ-fitness" class="text-matrixGreen font-bold">0.9980</span>
+        </div>
+      </div>
+
+      <!-- Tactical Action Bar -->
+      <div class="flex items-center gap-2">
+        <button id="audio-toggle-btn" data-action="toggleaudio" class="px-2.5 py-1 rounded text-xs font-mono bg-panelLight hover:bg-panelBorder border border-panelBorder text-slate-300 transition">
+          🔊 <span id="audio-label">AUDIO: ON</span>
+        </button>
+
+        <!-- Quick Simulation Triggers -->
+        <button data-action="triggersimulatedattack" data-arg="synflood" title="Simulate High-Rate Volumetric SYN Flood (Mirai Botnet)" class="px-2.5 py-1 rounded text-xs font-bold font-mono bg-neonRed/20 hover:bg-neonRed/30 border border-neonRed/60 text-neonRed transition shadow-sm hover:shadow-redGlow cursor-pointer">
+          ⚡ SYN FLOOD
+        </button>
+        <button data-action="triggersimulatedattack" data-arg="c2beacon" title="Simulate Periodic Encrypted C2 Beacon (Cobalt Strike / Sliver)" class="px-2.5 py-1 rounded text-xs font-bold font-mono bg-purple-900/40 hover:bg-purple-800/50 border border-purple-500/60 text-purple-300 transition cursor-pointer">
+          💀 C2 BEACON
+        </button>
+        <button data-action="triggersimulatedattack" data-arg="exfil" title="Simulate High-Entropy Data Exfiltration (RedLine / Ransomware)" class="px-2.5 py-1 rounded text-xs font-bold font-mono bg-amber-900/40 hover:bg-amber-800/50 border border-amber-500/60 text-amber-300 transition cursor-pointer">
+          📤 DATA EXFIL
+        </button>
+        <button data-action="triggersimulatedattack" data-arg="stratum" title="Simulate Stratum Protocol Mining Traffic (XMRig)" class="px-2.5 py-1 rounded text-xs font-bold font-mono bg-yellow-900/40 hover:bg-yellow-800/50 border border-yellow-500/60 text-yellow-300 transition cursor-pointer">
+          ⛏️ STRATUM
+        </button>
+        <button data-action="triggersimulatedattack" data-arg="xmasscan" title="Simulate Stealth Recon Scan (XMAS FPU Flags)" class="px-2.5 py-1 rounded text-xs font-bold font-mono bg-warningAmber/20 hover:bg-warningAmber/30 border border-warningAmber/60 text-warningAmber transition cursor-pointer">
+          ⚠️ XMAS SCAN
+        </button>
+        <button data-action="triggersimulatedattack" data-arg="clean" title="Inject Legitimate Clean Web Browsing Session" class="px-2.5 py-1 rounded text-xs font-bold font-mono bg-matrixGreen/20 hover:bg-matrixGreen/30 border border-matrixGreen/60 text-matrixGreen transition cursor-pointer">
+          + CLEAN WEB
+        </button>
+        <!-- Red Team Adversarial Evasion Triggers -->
+        <button data-action="triggersimulatedattack" data-arg="evasive_c2" title="Simulate Adversarial C2 Beacon Camouflaged in Structured JSON" class="px-2 py-1 rounded text-xs font-bold font-mono bg-red-950/60 hover:bg-red-900/80 border border-red-500/80 text-red-300 transition cursor-pointer">
+          🔴 EVASIVE C2
+        </button>
+        <button data-action="triggersimulatedattack" data-arg="evasive_flood" title="Simulate Sub-Threshold Jittered Flood with Standard Window Scaling" class="px-2 py-1 rounded text-xs font-bold font-mono bg-red-950/60 hover:bg-red-900/80 border border-red-500/80 text-red-300 transition cursor-pointer">
+          🔴 JITTER FLOOD
+        </button>
+        <button data-action="triggersimulatedattack" data-arg="evasive_scan" title="Simulate Stealth Probe with Normalized Linux TTL (64)" class="px-2 py-1 rounded text-xs font-bold font-mono bg-red-950/60 hover:bg-red-900/80 border border-red-500/80 text-red-300 transition cursor-pointer">
+          🔴 STEALTH CAMO
+        </button>
+      </div>
+
+    </div>
+
+    <!-- DECK TABS -->
+    <div class="border-t border-panelBorder/70 bg-void/80 px-4 flex items-center justify-between text-xs font-mono">
+      <div class="flex items-center gap-1">
+        <button id="tab-btn-ops" data-action="switchdeck" data-arg="ops" class="px-4 py-1.5 font-bold border-b-2 border-laserCyan text-laserCyan bg-laserCyan/5 transition">
+          [ DECK 1: TACTICAL OPS & ATTACK DOSSIER ]
+        </button>
+        <button id="tab-btn-lab" data-action="switchdeck" data-arg="lab" class="px-4 py-1.5 font-bold border-b-2 border-transparent text-textMuted hover:text-white transition">
+          [ DECK 2: NEURAL GENOME & TRAINING LAB ]
+        </button>
+        <button id="tab-btn-continuous" data-action="switchdeck" data-arg="continuous" class="px-4 py-1.5 font-bold border-b-2 border-transparent text-textMuted hover:text-white transition flex items-center gap-2">
+          <span id="tab-continuous-dot" class="w-2 h-2 rounded-full bg-slate-500"></span>
+          [ DECK 3: CONTINUOUS SNIFFING, LEARNING & EVOLUTION ]
+        </button>
+        <button id="tab-btn-autopilot" data-action="switchdeck" data-arg="autopilot" class="px-4 py-1.5 font-bold border-b-2 border-transparent text-textMuted hover:text-white transition flex items-center gap-2">
+          <span id="tab-autopilot-dot" class="w-2 h-2 rounded-full bg-slate-500"></span>
+          [ DECK 4: OPS & AUTOMATION ]
+        </button>
+      </div>
+      <div class="text-[11px] text-textMuted hidden md:block">
+        SYSTEM CLOCK: <span id="system-time" class="text-slate-300 font-semibold">00:00:00</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================================================================== -->
+  <!-- DECK 1: TACTICAL DEFENSE & ATTACK DOSSIER                             -->
+  <!-- ==================================================================== -->
+  <main id="deck-ops" class="flex-1 max-w-[1600px] w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+    <!-- LEFT COLUMN: THREAT GAUGES, NEAT TOPOLOGY, & DOSSIER (5 COLS) -->
+    <div class="lg:col-span-5 flex flex-col gap-6">
+
+      <!-- THREAT SPEEDOMETER -->
+      <div class="hud-box p-5">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-neonRed animate-pulse"></span>
+            <h2 class="text-xs font-bold font-display tracking-widest text-slate-300">REAL-TIME ANOMALY SPEEDOMETER</h2>
+          </div>
+          <span id="threat-badge" class="px-2 py-0.5 rounded text-[10px] font-bold font-mono bg-matrixGreen/15 text-matrixGreen border border-matrixGreen/40">
+            BASELINE NORMAL
+          </span>
+        </div>
+
+        <div class="flex items-center justify-center my-1">
+          <div class="relative w-64 h-32 flex items-center justify-center">
+            <svg class="w-64 h-32" viewBox="0 0 200 100">
+              <!-- Gauge Background Arc -->
+              <path d="M 20 95 A 75 75 0 0 1 180 95" fill="none" stroke="#141a29" stroke-width="12" stroke-linecap="round"/>
+              <!-- Gauge Active Arc -->
+              <path id="gauge-arc" d="M 20 95 A 75 75 0 0 1 180 95" fill="none" stroke="#00ff88" stroke-width="12" stroke-linecap="round" stroke-dasharray="235.6" stroke-dashoffset="235.6" class="transition-all duration-300"/>
+              <!-- Gauge Readout -->
+              <text id="gauge-number" x="100" y="80" text-anchor="middle" class="font-mono text-3xl font-extrabold fill-white">0.0000</text>
+              <text x="100" y="96" text-anchor="middle" class="font-mono text-[8px] fill-textMuted tracking-wider">ANOMALY COEFFICIENT</text>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Demonic Skull Alert Banner (Dynamic) -->
+        <div id="demonic-alert-banner" class="hidden mt-2 p-3 bg-neonRed/15 border border-neonRed/50 rounded text-xs font-mono text-slate-200">
+          <div class="flex items-center gap-3">
+            <div class="text-3xl skull-alarm">💀</div>
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-neonRed tracking-wider">HOSTILE INTRUSION TERMINATED</span>
+                <span class="text-[10px] bg-neonRed text-black px-1.5 py-0.2 font-bold rounded">POLICY APPLIED</span>
+              </div>
+              <p class="text-[11px] text-slate-300 mt-0.5">"I'VE ALREADY TASTED YOUR IP" — Automated Windows Firewall Ingress Block Active</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COUNCIL OF SPECIALISTS (MIXTURE OF EXPERTS - MoE) DELIBERATION PANEL -->
+      <div class="hud-box p-5 border border-laserCyan/30">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-laserCyan animate-pulse"></span>
+            <h2 class="text-xs font-bold font-display tracking-widest text-slate-200">SPECIALIST COUNCIL (MoE) ARBITER</h2>
+          </div>
+          <span id="council-mode-badge" class="px-2 py-0.5 rounded text-[10px] font-bold font-mono bg-laserCyan/15 text-laserCyan border border-laserCyan/40">
+            3/3 SPECIALISTS ONLINE
+          </span>
+        </div>
+
+        <!-- Real-Time Council Opinion Bars -->
+        <div class="space-y-3 font-mono text-xs">
+          <!-- Specialist 1: Volumetric Vanguard -->
+          <div class="p-2.5 rounded bg-panelLight border border-panelBorder">
+            <div class="flex items-center justify-between text-[11px] mb-1">
+              <span class="flex items-center gap-1.5 text-laserCyan font-bold">
+                <span>⚡</span> VOLUMETRIC VANGUARD (Rates &amp; Floods)
+              </span>
+              <span id="council-score-vol" class="font-bold text-white">0.0000</span>
+            </div>
+            <div class="w-full bg-slate-900 rounded-full h-2 overflow-hidden border border-slate-700/50">
+              <div id="council-bar-vol" class="h-full bg-gradient-to-r from-laserCyan/50 to-laserCyan rounded-full transition-all duration-300 w-0"></div>
+            </div>
+            <div class="flex justify-between text-[9px] text-textMuted mt-1">
+              <span>Inputs: 7-Dim (Rates, MTU, Window, SYN)</span>
+              <span id="prov-vol" class="text-slate-500" title="Held-out FPR that earned this seat (train_honest.py promotion gate)">FPR —</span>
+              <span id="council-vol-status" class="text-matrixGreen">NORMAL</span>
+            </div>
+          </div>
+
+          <!-- Specialist 2: Recon Inquisitor -->
+          <div class="p-2.5 rounded bg-panelLight border border-panelBorder">
+            <div class="flex items-center justify-between text-[11px] mb-1">
+              <span class="flex items-center gap-1.5 text-warningAmber font-bold">
+                <span>🔍</span> RECON INQUISITOR (Flags &amp; Scans)
+              </span>
+              <span id="council-score-rec" class="font-bold text-white">0.0000</span>
+            </div>
+            <div class="w-full bg-slate-900 rounded-full h-2 overflow-hidden border border-slate-700/50">
+              <div id="council-bar-rec" class="h-full bg-gradient-to-r from-warningAmber/50 to-warningAmber rounded-full transition-all duration-300 w-0"></div>
+            </div>
+            <div class="flex justify-between text-[9px] text-textMuted mt-1">
+              <span>Inputs: 10-Dim (XMAS, NULL, SF, TTL Div, Ports)</span>
+              <span id="prov-rec" class="text-slate-500" title="Held-out FPR that earned this seat (train_honest.py promotion gate)">FPR —</span>
+              <span id="council-rec-status" class="text-matrixGreen">NORMAL</span>
+            </div>
+          </div>
+
+          <!-- Specialist 3: Deep-Payload Analyst -->
+          <div class="p-2.5 rounded bg-panelLight border border-panelBorder">
+            <div class="flex items-center justify-between text-[11px] mb-1">
+              <span class="flex items-center gap-1.5 text-purple-400 font-bold">
+                <span>🧠</span> DEEP-PAYLOAD ANALYST (Entropy &amp; C2)
+              </span>
+              <span id="council-score-pay" class="font-bold text-white">0.0000</span>
+            </div>
+            <div class="w-full bg-slate-900 rounded-full h-2 overflow-hidden border border-slate-700/50">
+              <div id="council-bar-pay" class="h-full bg-gradient-to-r from-purple-500/50 to-purple-400 rounded-full transition-all duration-300 w-0"></div>
+            </div>
+            <div class="flex justify-between text-[9px] text-textMuted mt-1">
+              <span>Inputs: 7-Dim (Shannon Entropy, Payload, Ports)</span>
+              <span id="prov-pay" class="text-slate-500" title="Held-out FPR that earned this seat (train_honest.py promotion gate)">FPR —</span>
+              <span id="council-pay-status" class="text-matrixGreen">NORMAL</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Seat provenance: the holdout numbers that earned each chair -->
+        <div id="council-provenance" class="mt-2 pt-2 border-t border-panelBorder/70 text-[9px] font-mono text-slate-500"></div>
+
+        <!-- Consensus Readout Footer -->
+        <div class="mt-3 pt-2.5 border-t border-panelBorder/70 flex items-center justify-between text-[10px] font-mono">
+          <div>
+            <span class="text-textMuted">DECISIVE EXPERT:</span>
+            <span id="council-leading-expert" class="text-white font-bold ml-1">NONE</span>
+          </div>
+          <div>
+            <span class="text-textMuted">CONSENSUS RULE:</span>
+            <span id="council-consensus-rule" class="text-laserCyan ml-1">DISJUNCTION</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ATTACKER FORENSIC DOSSIER & GEOLOCATION (EXTREME DEPTH) -->
+      <div class="hud-box p-5">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-laserCyan">▶</span>
+            <h2 class="text-xs font-bold font-display tracking-widest text-slate-300">ATTACKER FORENSIC DOSSIER</h2>
+          </div>
+          <span class="text-[10px] text-textMuted font-mono">AUTOMATED ENRICHMENT</span>
+        </div>
+
+        <div id="dossier-content" class="space-y-3 text-xs font-mono">
+          <!-- ThreatFox / Abuse.ch Verified C2 Banner -->
+          <div id="dossier-c2-banner" class="hidden p-2 rounded bg-purple-950/70 border border-purple-500/80 text-purple-200 text-xs font-mono shadow-sm">
+            <div class="flex items-center justify-between">
+              <span class="font-bold flex items-center gap-1.5 text-purple-300">
+                <span class="w-2 h-2 rounded-full bg-purple-400 animate-ping"></span>
+                ⚠️ VERIFIED THREATFOX C2 IOC
+              </span>
+              <span class="text-[9px] px-1.5 py-0.5 rounded bg-purple-900 border border-purple-400/50 text-purple-200 font-bold">ABUSE.CH MATCH</span>
+            </div>
+            <div class="text-[11px] text-purple-200 mt-1">
+              Malware Family: <span id="dossier-c2-family" class="font-bold text-white">Known Malware</span>
+            </div>
+          </div>
+
+          <!-- Main IP & Geo -->
+          <div class="grid grid-cols-2 gap-2 p-2.5 rounded bg-panelLight border border-panelBorder">
+            <div>
+              <span class="text-[10px] text-textMuted block">ORIGIN IP / PORT:</span>
+              <span id="dossier-ip" class="text-laserCyan font-bold text-sm">--.--.--.--:--</span>
+            </div>
+            <div>
+              <span class="text-[10px] text-textMuted block">GEOLOCATION:</span>
+              <span id="dossier-geo" class="text-white font-bold text-sm">🌐 Awaiting Threat</span>
+            </div>
+          </div>
+
+          <!-- ISP & Threat Attribution -->
+          <div class="space-y-1.5 p-2.5 rounded bg-panelLight border border-panelBorder">
+            <div class="flex justify-between">
+              <span class="text-textMuted">AUTONOMOUS SYSTEM:</span>
+              <span id="dossier-asn" class="text-slate-300 font-semibold text-right truncate max-w-[200px]">--</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-textMuted">THREAT ACTOR PROFILE:</span>
+              <span id="dossier-actor" class="text-warningAmber font-bold text-right truncate max-w-[200px]">--</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-textMuted">PASSIVE OS FINGERPRINT:</span>
+              <span id="dossier-os" class="text-slate-200 font-semibold text-right truncate max-w-[200px]">--</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-textMuted">TARGETED SERVICE:</span>
+              <span id="dossier-target" class="text-matrixGreen font-bold text-right truncate max-w-[200px]">--</span>
+            </div>
+            <div class="flex justify-between items-center pt-1 border-t border-panelBorder/60">
+              <span class="text-textMuted">MITRE ATT&CK:</span>
+              <a id="dossier-mitre-link" href="https://attack.mitre.org/techniques/T1046/" target="_blank" title="View Technique in MITRE ATT&CK Matrix" class="px-2 py-0.5 rounded bg-neonRed/15 hover:bg-neonRed/25 border border-neonRed/50 text-neonRed font-semibold text-[11px] text-right truncate max-w-[240px] transition inline-flex items-center gap-1">
+                <span id="dossier-mitre-id" class="font-bold">--</span>: <span id="dossier-mitre-name" class="truncate">Awaiting Anomaly</span> ↗
+              </a>
+            </div>
+          </div>
+
+          <!-- TCP Frame Micro-Analysis & Hex Dump -->
+          <div class="p-2.5 rounded bg-panelLight border border-panelBorder space-y-1">
+            <div class="flex justify-between text-[11px]">
+              <span class="text-textMuted">SEQ: <span id="dossier-seq" class="text-white">--</span></span>
+              <span class="text-textMuted">ACK: <span id="dossier-ack" class="text-white">--</span></span>
+              <span class="text-textMuted">WIN: <span id="dossier-win" class="text-white">--</span></span>
+              <span class="text-textMuted">TTL: <span id="dossier-ttl" class="text-white">--</span></span>
+            </div>
+            <div class="mt-2">
+              <span class="text-[10px] text-textMuted block mb-0.5">RAW PAYLOAD (HEX & ASCII DUMP):</span>
+              <div id="dossier-hex" class="p-1.5 rounded bg-void border border-panelBorder text-[10px] text-laserCyan overflow-x-auto whitespace-pre font-mono">-- No Active Payload --</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ACTIVE FIREWALL BAN MATRIX (COUNTDOWN TIMERS) -->
+      <div class="hud-box p-5 flex-1">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-neonRed font-bold">🚫</span>
+            <h2 class="text-xs font-bold font-display tracking-widest text-slate-300">ACTIVE FIREWALL BAN MATRIX (TTL 30M)</h2>
+          </div>
+          <span id="active-bans-count" class="px-2 py-0.5 rounded text-[10px] font-bold bg-neonRed/20 text-neonRed border border-neonRed/40 font-mono">0 BANNED</span>
+        </div>
+
+        <div class="overflow-y-auto max-h-48 border border-panelBorder rounded">
+          <table class="w-full text-left text-xs font-mono">
+            <thead class="bg-panelLight text-[10px] text-textMuted uppercase sticky top-0">
+              <tr>
+                <th class="p-2">Attacker IP</th>
+                <th class="p-2">Location</th>
+                <th class="p-2">Time Left</th>
+                <th class="p-2 text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody id="bans-table-body" class="divide-y divide-panelBorder">
+              <tr>
+                <td colspan="4" class="p-3 text-center text-textMuted italic text-xs">No active host firewall blocks.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ADVERSARIAL RED TEAM SPARRING ARENA (MINIMAX EVASION BENCHMARK) -->
+      <div class="hud-box p-5 border border-red-500/30">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
+            <h2 class="text-xs font-bold font-display tracking-widest text-slate-200">ADVERSARIAL RED TEAM SPARRING ARENA</h2>
+          </div>
+          <span id="adversary-hof-badge" class="px-2 py-0.5 rounded text-[10px] font-bold font-mono bg-red-950/60 text-red-400 border border-red-500/40">
+            CO-EVOLUTION HARDENED
+          </span>
+        </div>
+
+        <p class="text-[10px] text-textMuted font-mono mb-3">
+          Synthetic adversarial mutations pitting the Specialist Council against 5 progressive evasion tiers (Jitter, Entropy, TTL, Camouflage).
+        </p>
+
+        <!-- 5-Tier Resilience Progress Grid -->
+        <div class="space-y-2.5 font-mono text-xs mb-4">
+          <!-- Tier 0 -->
+          <div class="p-2 rounded bg-panelLight border border-panelBorder">
+            <div class="flex items-center justify-between text-[11px] mb-1">
+              <span class="text-slate-300 font-bold">Tier 0: Standard Unmutated Baseline</span>
+              <span id="adv-t0-rate" class="font-bold text-slate-500">&mdash;</span>
+            </div>
+            <div class="w-full bg-slate-900 rounded-full h-1.5 overflow-hidden border border-slate-700/50">
+              <div id="adv-t0-bar" class="h-full bg-matrixGreen rounded-full transition-all duration-300 w-full"></div>
+            </div>
+            <div class="flex justify-between text-[9px] text-textMuted mt-0.5">
+              <span>Strategy: None (Raw Floods &amp; Exploits)</span>
+              <span>Council Baseline: 100.0%</span>
+            </div>
+          </div>
+
+          <!-- Tier 1 -->
+          <div class="p-2 rounded bg-panelLight border border-panelBorder">
+            <div class="flex items-center justify-between text-[11px] mb-1">
+              <span class="text-laserCyan font-bold">Tier 1: Timing Jitter &amp; Rate Shaping</span>
+              <span id="adv-t1-rate" class="font-bold text-slate-500">&mdash;</span>
+            </div>
+            <div class="w-full bg-slate-900 rounded-full h-1.5 overflow-hidden border border-slate-700/50">
+              <div id="adv-t1-bar" class="h-full bg-matrixGreen rounded-full transition-all duration-300 w-full"></div>
+            </div>
+            <div class="flex justify-between text-[9px] text-textMuted mt-0.5">
+              <span>Strategy: Poisson Micro-bursts (&Delta;t &gt; 0.25s)</span>
+              <span class="text-matrixGreen font-bold">Council +43.9% vs Monolith</span>
+            </div>
+          </div>
+
+          <!-- Tier 2 -->
+          <div class="p-2 rounded bg-panelLight border border-panelBorder">
+            <div class="flex items-center justify-between text-[11px] mb-1">
+              <span class="text-warningAmber font-bold">Tier 2: TTL Masquerading &amp; OS Camo</span>
+              <span id="adv-t2-rate" class="font-bold text-slate-500">&mdash;</span>
+            </div>
+            <div class="w-full bg-slate-900 rounded-full h-1.5 overflow-hidden border border-slate-700/50">
+              <div id="adv-t2-bar" class="h-full bg-laserCyan rounded-full transition-all duration-300 w-0"></div>
+            </div>
+            <div class="flex justify-between text-[9px] text-textMuted mt-0.5">
+              <span>Strategy: Linux/Windows Standard TTL Injection</span>
+              <span>Recon Specialist Veto</span>
+            </div>
+          </div>
+
+          <!-- Tier 3 -->
+          <div class="p-2 rounded bg-panelLight border border-panelBorder">
+            <div class="flex items-center justify-between text-[11px] mb-1">
+              <span class="text-purple-400 font-bold">Tier 3: Entropy Flattening (JSON/HTML)</span>
+              <span id="adv-t3-rate" class="font-bold text-slate-500">&mdash;</span>
+            </div>
+            <div class="w-full bg-slate-900 rounded-full h-1.5 overflow-hidden border border-slate-700/50">
+              <div id="adv-t3-bar" class="h-full bg-warningAmber rounded-full transition-all duration-300 w-0"></div>
+            </div>
+            <div class="flex justify-between text-[9px] text-textMuted mt-0.5">
+              <span>Strategy: Camouflage Padding (Entropy &lt; 0.65)</span>
+              <span>Deep-Payload Analyst Veto</span>
+            </div>
+          </div>
+
+          <!-- Tier 4 -->
+          <div class="p-2 rounded bg-panelLight border border-panelBorder">
+            <div class="flex items-center justify-between text-[11px] mb-1">
+              <span class="text-neonRed font-bold">Tier 4: Blended Full-Spectrum Evasion</span>
+              <span id="adv-t4-rate" class="font-bold text-slate-500">&mdash;</span>
+            </div>
+            <div class="w-full bg-slate-900 rounded-full h-1.5 overflow-hidden border border-slate-700/50">
+              <div id="adv-t4-bar" class="h-full bg-purple-500 rounded-full transition-all duration-300 w-0"></div>
+            </div>
+            <div class="flex justify-between text-[9px] text-textMuted mt-0.5">
+              <span>Strategy: Jitter + TTL + Entropy + Decoy Flags</span>
+              <span class="text-purple-300 font-bold">Hall of Fame Hardened</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Bar & Hall of Fame Telemetry -->
+        <div class="pt-2 border-t border-panelBorder/70 flex flex-col gap-2">
+          <button id="adv-stress-btn" data-action="runadversarystresstest" class="w-full py-2 rounded text-xs font-bold font-mono bg-red-950/80 hover:bg-red-900 border border-red-500 text-red-200 transition cursor-pointer flex items-center justify-center gap-2 shadow-lg">
+            <span>⚔️</span>
+            <span id="adv-btn-text">RUN FULL-SPECTRUM ADVERSARIAL STRESS TEST</span>
+          </button>
+          <div class="flex items-center justify-between text-[9px] font-mono text-textMuted mt-1">
+            <span>HALL OF FAME: <span id="adv-hof-count" class="text-white font-bold">4 Champions Stored</span></span>
+            <span class="text-matrixGreen">ZERO CATASTROPHIC FORGETTING</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN: LIVING NEAT GENOME BRAIN & REAL-TIME PACKET STREAM (7 COLS) -->
+    <div class="lg:col-span-7 flex flex-col gap-6">
+
+      <!-- LIVING NEAT GENOME BRAIN (ANIMATED SYNAPSE IMPULSES) -->
+      <div class="hud-box p-5">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-laserCyan animate-ping"></span>
+              <h2 class="text-xs font-bold font-display tracking-widest text-slate-200">LIVING NEAT GENOME TOPOLOGY // ACTIVE SYNAPSE ENGINE</h2>
+            </div>
+            <p class="text-[10px] text-textMuted font-mono">Real-time impulse conduction from 12 sensor neurons to the anomaly decision core</p>
+          </div>
+          <div class="flex items-center gap-2 text-[10px] font-mono">
+            <span class="flex items-center gap-1 text-laserCyan"><span class="w-2 h-2 rounded-full bg-laserCyan"></span> Excitatory (+)</span>
+            <span class="flex items-center gap-1 text-neonRed"><span class="w-2 h-2 rounded-full bg-neonRed"></span> Inhibitory (-)</span>
+          </div>
+        </div>
+
+        <!-- Canvas Container with Scanlines -->
+        <div class="relative w-full h-64 bg-void border border-panelBorder rounded overflow-hidden">
+          <canvas id="neat-canvas" class="w-full h-full block"></canvas>
+          <div class="absolute inset-0 scanline-overlay"></div>
+          
+          <!-- Node Tooltip on Hover -->
+          <div id="canvas-tooltip" class="hidden absolute z-20 px-2 py-1 bg-panel border border-laserCyan/50 rounded text-[10px] font-mono text-white shadow-cyanGlow pointer-events-none">
+            Tooltip
+          </div>
+        </div>
+      </div>
+
+      <!-- REAL-TIME INGRESS PACKET STREAM TABLE & 20-D FEATURE DRAWER -->
+      <div class="hud-box p-5 flex-1 flex flex-col">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-laserCyan">▶</span>
+            <h2 class="text-xs font-bold font-display tracking-widest text-slate-300">LIVE PACKET STREAM & 20-D VECTOR INSPECTION</h2>
+          </div>
+          <div class="text-[10px] text-textMuted font-mono">
+            TOTAL EVALUATED: <span id="total-packets-val" class="text-white font-bold">0</span> | THREATS: <span id="total-threats-val" class="text-neonRed font-bold">0</span>
+          </div>
+        </div>
+
+        <!-- Packet Feed Table -->
+        <div class="flex-1 overflow-y-auto max-h-72 border border-panelBorder rounded">
+          <table class="w-full text-left text-xs font-mono">
+            <thead class="bg-panelLight text-[10px] text-textMuted uppercase sticky top-0">
+              <tr>
+                <th class="p-2">Time</th>
+                <th class="p-2">Source</th>
+                <th class="p-2">Destination</th>
+                <th class="p-2">Flags</th>
+                <th class="p-2">Anomaly Score</th>
+                <th class="p-2 text-right">Attribution</th>
+              </tr>
+            </thead>
+            <tbody id="packets-table-body" class="divide-y divide-panelBorder">
+              <tr>
+                <td colspan="6" class="p-4 text-center text-textMuted italic text-xs">Awaiting incoming network traffic or simulation trigger...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 20-D Slide-out Drawer Preview (Click Row to Populate) -->
+        <div id="feature-drawer" class="mt-3 p-3 bg-panelLight border border-panelBorder rounded text-xs font-mono hidden">
+          <div class="flex items-center justify-between mb-2">
+            <span class="font-bold text-laserCyan tracking-wider flex items-center gap-2">
+              <span>🔬</span> 20-DIMENSIONAL NORMALIZED FEATURE DUMP
+            </span>
+            <span id="drawer-packet-label" class="text-[10px] text-textMuted">PKT: --</span>
+          </div>
+          <div id="drawer-features-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[10px]">
+            <!-- Injected via JavaScript -->
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ==================================================================== -->
+  <!-- DECK 2: NEUROEVOLUTION & TRAINING LAB                                -->
+  <!-- ==================================================================== -->
+  <main id="deck-lab" class="hidden flex-1 max-w-[1600px] w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+    <!-- LEFT: EVOLUTIONARY TRAJECTORY & CONTROLS (7 COLS) -->
+    <div class="lg:col-span-7 flex flex-col gap-6">
+
+      <!-- GENERATIONS VS FITNESS PROGRESSION GRAPH -->
+      <div class="hud-box p-5">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-matrixGreen">📈</span>
+              <h2 class="text-xs font-bold font-display tracking-widest text-slate-200">POPULATION FITNESS TRAJECTORY (GENERATIONS 0 - 15)</h2>
+            </div>
+            <p class="text-[10px] text-textMuted font-mono">Fitness optimization: high attack spike, low normal MSE, zero false alarm penalty</p>
+          </div>
+          
+          <!-- Trigger Evolution Button -->
+          <button id="evolve-btn" data-action="triggerevolutionburst" class="px-3 py-1.5 rounded text-xs font-mono font-bold bg-laserCyan/20 hover:bg-laserCyan/30 border border-laserCyan/50 text-laserCyan transition flex items-center gap-2">
+            <span>⚡</span> <span id="evolve-btn-label">EVOLVE 5 GENERATIONS</span>
+          </button>
+        </div>
+
+        <!-- SVG Fitness Line Chart -->
+        <div class="relative w-full h-64 bg-void border border-panelBorder rounded p-3 flex flex-col justify-between">
+          <svg id="fitness-chart" class="w-full h-full" viewBox="0 0 500 200">
+            <!-- Grid Lines -->
+            <line x1="40" y1="20" x2="480" y2="20" stroke="#161c28" stroke-dasharray="2"/>
+            <line x1="40" y1="65" x2="480" y2="65" stroke="#161c28" stroke-dasharray="2"/>
+            <line x1="40" y1="110" x2="480" y2="110" stroke="#161c28" stroke-dasharray="2"/>
+            <line x1="40" y1="155" x2="480" y2="155" stroke="#161c28" stroke-dasharray="2"/>
+
+            <!-- Axes Labels -->
+            <text x="10" y="25" class="fill-textMuted font-mono text-[9px]">1.00</text>
+            <text x="10" y="70" class="fill-textMuted font-mono text-[9px]">0.90</text>
+            <text x="10" y="115" class="fill-textMuted font-mono text-[9px]">0.75</text>
+            <text x="10" y="160" class="fill-textMuted font-mono text-[9px]">0.50</text>
+
+            <!-- Line for Best Fitness (Green) -->
+            <path id="chart-line-best" d="M 50 140 L 130 90 L 210 65 L 290 45 L 370 30 L 450 21" fill="none" stroke="#00ff88" stroke-width="2.5" stroke-linecap="round"/>
+            <!-- Line for Average Fitness (Cyan) -->
+            <path id="chart-line-avg" d="M 50 180 L 130 150 L 210 120 L 290 95 L 370 70 L 450 55" fill="none" stroke="#00f0ff" stroke-width="1.5" stroke-dasharray="4" stroke-linecap="round"/>
+
+            <!-- Points on Best Fitness -->
+            <circle cx="50" cy="140" r="3" fill="#00ff88"/>
+            <circle cx="130" cy="90" r="3" fill="#00ff88"/>
+            <circle cx="210" cy="65" r="3" fill="#00ff88"/>
+            <circle cx="290" cy="45" r="3" fill="#00ff88"/>
+            <circle cx="370" cy="30" r="3" fill="#00ff88"/>
+            <circle cx="450" cy="21" r="5" fill="#00ff88" class="animate-ping"/>
+            <circle cx="450" cy="21" r="4" fill="#ffffff"/>
+          </svg>
+
+          <!-- Chart Legend -->
+          <div class="flex items-center justify-between text-[10px] font-mono text-textMuted px-2">
+            <div class="flex items-center gap-4">
+              <span class="flex items-center gap-1 text-matrixGreen"><span class="w-3 h-0.5 bg-matrixGreen inline-block"></span> Champion Best (0.9980)</span>
+              <span class="flex items-center gap-1 text-laserCyan"><span class="w-3 h-0.5 bg-laserCyan inline-block border-dashed"></span> Population Avg (0.9240)</span>
+            </div>
+            <span>GEN 0 ──────────────► GEN 15</span>
+          </div>
+        </div>
+
+        <div id="evolution-log" class="mt-3 p-2 bg-panelLight border border-panelBorder rounded text-[11px] font-mono text-textMuted">
+          [SYSTEM]: Active champion loaded from <span class="text-slate-200">genomes/champion.pkl</span>. Ready for on-demand re-evolution.
+        </div>
+      </div>
+
+      <!-- SPECIATION & GENOME COMPLEXITY METRICS -->
+      <div class="hud-box p-5 grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+        <div class="p-3 bg-panelLight border border-panelBorder rounded">
+          <span class="text-[10px] text-textMuted block">POPULATION SIZE</span>
+          <span class="text-xl font-bold font-mono text-white">100</span>
+          <span class="text-[9px] text-matrixGreen block">Genomes Evaluated</span>
+        </div>
+        <div class="p-3 bg-panelLight border border-panelBorder rounded">
+          <span class="text-[10px] text-textMuted block">SPECIES COUNT</span>
+          <span class="text-xl font-bold font-mono text-laserCyan">4</span>
+          <span class="text-[9px] text-textMuted block">Dynamic Niches</span>
+        </div>
+        <div class="p-3 bg-panelLight border border-panelBorder rounded">
+          <span class="text-[10px] text-textMuted block">ACTIVE NEURONS</span>
+          <span class="text-xl font-bold font-mono text-matrixGreen">13</span>
+          <span class="text-[9px] text-textMuted block">12 In + 1 Out</span>
+        </div>
+        <div class="p-3 bg-panelLight border border-panelBorder rounded">
+          <span class="text-[10px] text-textMuted block">MUTATION RATE</span>
+          <span class="text-xl font-bold font-mono text-warningAmber">80%</span>
+          <span class="text-[9px] text-textMuted block">Synapse Perturbation</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: RAY CLUSTER BENCHMARKS & PREDICTIVE LSTM FORECASTER (5 COLS) -->
+    <div class="lg:col-span-5 flex flex-col gap-6">
+
+      <!-- RAY DISTRIBUTED CLUSTER SPEED BENCHMARK -->
+      <div class="hud-box p-5">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-laserCyan">⚡</span>
+            <h2 class="text-xs font-bold font-display tracking-widest text-slate-200">RAY DISTRIBUTED THROUGHPUT BENCHMARK</h2>
+          </div>
+          <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-laserCyan/20 text-laserCyan border border-laserCyan/40 font-mono">PHASE 4 ACTIVE</span>
+        </div>
+
+        <div class="p-4 bg-panelLight border border-panelBorder rounded space-y-3">
+          <div class="flex items-baseline justify-between">
+            <span class="text-xs text-textMuted">CLUSTER EVALUATION SPEED:</span>
+            <span class="text-2xl font-bold font-mono text-laserCyan">2,330.3 <span class="text-xs font-normal text-slate-400">evals/sec</span></span>
+          </div>
+
+          <!-- Speed comparison bar -->
+          <div>
+            <div class="flex justify-between text-[10px] font-mono text-textMuted mb-1">
+              <span>Single Laptop Core (280/s)</span>
+              <span>16-Core Ryzen Ray Cluster (2,330/s)</span>
+            </div>
+            <div class="w-full h-2.5 bg-void border border-panelBorder rounded overflow-hidden flex">
+              <div class="w-[12%] bg-slate-600"></div>
+              <div class="w-[88%] bg-laserCyan shadow-cyanGlow"></div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 text-[10px] font-mono pt-1 text-textMuted border-t border-panelBorder">
+            <div>HARDWARE: <span class="text-slate-200">16 Cores / 32 Threads</span></div>
+            <div>SCALING FACTOR: <span class="text-matrixGreen font-bold">8.3x Linear</span></div>
+            <div>SHARED MEMORY: <span class="text-slate-200">Plasma Zero-Copy</span></div>
+            <div>CLUSTER NODES: <span class="text-slate-200">1 Head / Edge Ready</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PREDICTIVE BRAIN: PYTORCH LSTM HORIZON FORECASTER -->
+      <div class="hud-box p-5">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-matrixGreen">🧠</span>
+            <h2 class="text-xs font-bold font-display tracking-widest text-slate-200">PREDICTIVE LSTM RECON HORIZON (PHASE 3)</h2>
+          </div>
+          <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-matrixGreen/20 text-matrixGreen border border-matrixGreen/40 font-mono">ONNX RUNTIME</span>
+        </div>
+
+        <div class="p-4 bg-panelLight border border-panelBorder rounded space-y-3 text-xs font-mono">
+          <div class="flex justify-between items-center">
+            <span class="text-textMuted">SEQUENCE ACCURACY:</span>
+            <span class="text-matrixGreen font-bold">100.0% (Validation Pass)</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-textMuted">LOOKBACK WINDOW (T):</span>
+            <span class="text-white font-bold">30 Sliding Packets</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-textMuted">ADVANCE WARNING HORIZON:</span>
+            <span class="text-laserCyan font-bold">15 - 30 Minutes</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-textMuted">CURRENT RECON PROBABILITY:</span>
+            <span id="lstm-recon-prob" class="text-matrixGreen font-bold">0.02 (DORMANT)</span>
+          </div>
+
+          <div class="pt-2 border-t border-panelBorder text-[10px] text-textMuted">
+            MODEL PATH: <span class="text-slate-300">models/predictive_brain.onnx</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- GENETIC SURGEON // META-LEARNING DIRECTED MUTATION CONSOLE -->
+      <div class="hud-box p-5 border border-amber-500/30">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span>
+            <h2 class="text-xs font-bold font-display tracking-widest text-slate-200">GENETIC SURGEON // META-LEARNING CONSOLE</h2>
+          </div>
+          <span id="surgeon-badge" class="px-2 py-0.5 rounded text-[10px] font-bold font-mono bg-amber-950/60 text-amber-300 border border-amber-500/40">
+            DIRECTED SPLICING READY
+          </span>
+        </div>
+
+        <p class="text-[10px] text-textMuted font-mono mb-3">
+          Diagnoses validation false negatives/positives and splices targeted excitatory synapses, inhibitory shields, and combiner nodes into stagnant lineages.
+        </p>
+
+        <!-- Surgery Telemetry Metrics -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 mb-3 font-mono text-xs">
+          <div class="p-2 rounded bg-panelLight border border-panelBorder">
+            <span class="text-[9px] text-textMuted block">TOTAL SURGERIES:</span>
+            <span id="surgeon-total-count" class="text-amber-300 font-bold text-base">0</span>
+          </div>
+          <div class="p-2 rounded bg-panelLight border border-panelBorder">
+            <span class="text-[9px] text-textMuted block">CONVERGENCE SPEEDUP:</span>
+            <span id="surgeon-speedup-val" class="text-matrixGreen font-bold text-base">5.0x Accelerated</span>
+          </div>
+          <div class="p-2 rounded bg-panelLight border border-panelBorder col-span-2 sm:col-span-1">
+            <span class="text-[9px] text-textMuted block">STATUS:</span>
+            <span id="surgeon-status-val" class="text-laserCyan font-bold text-base">HEURISTIC READY</span>
+          </div>
+        </div>
+
+        <!-- Last Surgical Operation Log Console -->
+        <div class="mb-3">
+          <span class="text-[10px] text-textMuted font-mono block mb-1">RECENT SURGICAL INTERVENTION FEED:</span>
+          <div id="surgeon-log-console" class="p-2.5 rounded bg-void border border-panelBorder max-h-28 overflow-y-auto font-mono text-[10px] space-y-1 text-slate-300">
+            <div class="text-textMuted italic">[SURGEON]: Meta-Learning Surgeon standby. Awaiting directed operation trigger.</div>
+          </div>
+        </div>
+
+        <!-- Surgical Action Button -->
+        <button id="surgeon-op-btn" data-action="triggerdirectedsurgery" class="w-full py-2 rounded text-xs font-bold font-mono bg-amber-950/70 hover:bg-amber-900 border border-amber-500 text-amber-200 transition cursor-pointer flex items-center justify-center gap-2 shadow-sm">
+          <span>🔬</span>
+          <span id="surgeon-btn-text">TRIGGER DIRECTED SURGERY ON CANDIDATE GENOME</span>
+        </button>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ==================================================================== -->
+  <!-- DECK 3: AUTONOMOUS CONTINUOUS SNIFFING, LEARNING & EVOLUTION HUB      -->
+  <!-- ==================================================================== -->
+  <main id="deck-continuous" class="hidden flex-1 max-w-[1600px] w-full mx-auto p-4 md:p-6 flex flex-col gap-6">
+
+    <!-- MASTER CONTINUOUS LEARNING CONTROLLER & STATUS BAR -->
+    <div class="hud-box p-5">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2.5">
+            <span id="cont-status-indicator" class="w-3 h-3 rounded-full bg-slate-500"></span>
+            <h2 class="text-sm font-bold font-display tracking-widest text-white">AUTONOMOUS CONTINUOUS LEARNING LOOP</h2>
+            <span id="cont-status-badge" class="px-2.5 py-0.5 rounded text-xs font-mono font-bold bg-slate-800 text-slate-300 border border-slate-700">STANDBY / IDLE</span>
+          </div>
+          <p class="text-[11px] text-textMuted font-mono mt-1">Live packets buffered to rotating PCAP &rarr; 20-D feature extraction &rarr; 16 Ray workers evolve NEAT population &rarr; Hot-reload</p>
+        </div>
+
+        <!-- Action Controls -->
+        <div class="flex items-center gap-3">
+          <button id="cont-toggle-btn" data-action="togglecontinuousloop" class="px-4 py-2 rounded text-xs font-mono font-bold tracking-wider transition flex items-center gap-2 bg-matrixGreen/20 hover:bg-matrixGreen/30 text-matrixGreen border border-matrixGreen/60 cursor-pointer shadow-sm">
+            <span id="cont-toggle-icon">▶</span> <span id="cont-toggle-label">START CONTINUOUS LEARNING LOOP</span>
+          </button>
+          <button data-action="injectcontinuousbatch" title="Inject a test burst of 35 mixed normal & threat packets to trigger an evolution cycle" class="px-3.5 py-2 rounded text-xs font-mono font-bold tracking-wider bg-laserCyan/20 hover:bg-laserCyan/30 text-laserCyan border border-laserCyan/50 transition cursor-pointer flex items-center gap-1.5">
+            <span>⚡</span> INJECT TEST BATCH (35 PKTS)
+          </button>
+        </div>
+      </div>
+
+      <!-- Real-Time Metrics Strip -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mt-4 pt-4 border-t border-panelBorder/70 text-xs font-mono">
+        <div class="p-2.5 rounded bg-panelLight border border-panelBorder">
+          <span class="text-[10px] text-textMuted block">CYCLES COMPLETED:</span>
+          <span id="cont-cycles" class="text-laserCyan font-bold text-base">0</span>
+        </div>
+        <div class="p-2.5 rounded bg-panelLight border border-panelBorder">
+          <span class="text-[10px] text-textMuted block">CURRENT BUFFER:</span>
+          <span id="cont-buffer" class="text-white font-bold text-base">0 / 30</span>
+        </div>
+        <div class="p-2.5 rounded bg-panelLight border border-panelBorder">
+          <span class="text-[10px] text-textMuted block">TOTAL SAVED PKTS:</span>
+          <span id="cont-saved-pkts" class="text-matrixGreen font-bold text-base">0</span>
+        </div>
+        <div class="p-2.5 rounded bg-panelLight border border-panelBorder">
+          <span class="text-[10px] text-textMuted block">PCAP ON DISK:</span>
+          <span id="cont-pcap-size" class="text-slate-200 font-bold text-base">0.0 KB</span>
+        </div>
+        <div class="p-2.5 rounded bg-panelLight border border-panelBorder">
+          <span class="text-[10px] text-textMuted block">CHAMPIONS PROMOTED:</span>
+          <span id="cont-promotions" class="text-warningAmber font-bold text-base">0</span>
+        </div>
+        <div class="p-2.5 rounded bg-panelLight border border-panelBorder">
+          <span class="text-[10px] text-textMuted block">ACTIVE CHAMPION:</span>
+          <span id="cont-champ-fit" class="text-matrixGreen font-bold text-base">0.9980</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4-STAGE PIPELINE FLOW ARCHITECTURE -->
+    <div class="hud-box p-5">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <span class="text-laserCyan">⚙️</span>
+          <h3 class="text-xs font-bold font-display tracking-widest text-slate-200">AUTONOMOUS 4-STAGE PIPELINE STATE</h3>
+        </div>
+        <span id="cont-pipeline-stage-label" class="text-[10px] font-mono text-textMuted">CURRENT STAGE: IDLE</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs font-mono">
+        <!-- Stage 1 -->
+        <div id="pipe-stage-1" class="p-3.5 rounded bg-panelLight border border-panelBorder transition-all duration-300 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[10px] text-textMuted font-bold">STAGE 01</span>
+              <span class="w-2 h-2 rounded-full bg-slate-600" id="pipe-dot-1"></span>
+            </div>
+            <div class="font-bold text-white tracking-wide">LIVE SNIFF & PCAP WRITER</div>
+            <p class="text-[10px] text-textMuted mt-1">Direct from Physical NIC into <span class="text-slate-300">continuous_baseline.pcap</span></p>
+          </div>
+          <div class="mt-3 text-[10px] pt-2 border-t border-panelBorder/60 flex justify-between text-slate-400">
+            <span>Buffer Threshold:</span>
+            <span class="text-laserCyan font-bold">30 Packets</span>
+          </div>
+        </div>
+
+        <!-- Stage 2 -->
+        <div id="pipe-stage-2" class="p-3.5 rounded bg-panelLight border border-panelBorder transition-all duration-300 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[10px] text-textMuted font-bold">STAGE 02</span>
+              <span class="w-2 h-2 rounded-full bg-slate-600" id="pipe-dot-2"></span>
+            </div>
+            <div class="font-bold text-white tracking-wide">20-D FEATURE EXTRACTION</div>
+            <p class="text-[10px] text-textMuted mt-1">Shannon byte entropy, stealth flags, TTL divergence, window ratios</p>
+          </div>
+          <div class="mt-3 text-[10px] pt-2 border-t border-panelBorder/60 flex justify-between text-slate-400">
+            <span>Vector Dimensions:</span>
+            <span class="text-laserCyan font-bold">20 Normalized</span>
+          </div>
+        </div>
+
+        <!-- Stage 3 -->
+        <div id="pipe-stage-3" class="p-3.5 rounded bg-panelLight border border-panelBorder transition-all duration-300 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[10px] text-textMuted font-bold">STAGE 03</span>
+              <span class="w-2 h-2 rounded-full bg-slate-600" id="pipe-dot-3"></span>
+            </div>
+            <div class="font-bold text-white tracking-wide">16-CORE RAY EVOLUTION</div>
+            <p class="text-[10px] text-textMuted mt-1">150 genomes evaluated across parallel worker cluster</p>
+          </div>
+          <div class="mt-3 text-[10px] pt-2 border-t border-panelBorder/60 flex justify-between text-slate-400">
+            <span>Evaluations / Sec:</span>
+            <span class="text-matrixGreen font-bold">~500 evals/s</span>
+          </div>
+        </div>
+
+        <!-- Stage 4 -->
+        <div id="pipe-stage-4" class="p-3.5 rounded bg-panelLight border border-panelBorder transition-all duration-300 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[10px] text-textMuted font-bold">STAGE 04</span>
+              <span class="w-2 h-2 rounded-full bg-slate-600" id="pipe-dot-4"></span>
+            </div>
+            <div class="font-bold text-white tracking-wide">HOLDOUT GATE & RELOAD</div>
+            <p class="text-[10px] text-textMuted mt-1">Archive previous champion, promote winner, broadcast <span class="text-slate-300">.reload_signal</span></p>
+          </div>
+          <div class="mt-3 text-[10px] pt-2 border-t border-panelBorder/60 flex justify-between text-slate-400">
+            <span>Downtime:</span>
+            <span class="text-matrixGreen font-bold">0.0 ms (Instant)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIVE REAL-TIME TELEMETRY GRAPHS (OSCILLOSCOPE & CONTINUOUS FITNESS) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- LEFT: REAL-TIME THREAT & ANOMALY OSCILLOSCOPE (7 COLS) -->
+      <div class="lg:col-span-7 hud-box p-5 flex flex-col">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-neonRed animate-pulse"></span>
+              <h3 class="text-xs font-bold font-display tracking-widest text-slate-200">REAL-TIME THREAT & ANOMALY OSCILLOSCOPE</h3>
+            </div>
+            <p class="text-[10px] text-textMuted font-mono">Live scrolling waveform of every evaluated packet score (0.0 = Normal, 1.0 = Lethal Threat)</p>
+          </div>
+          <div class="flex items-center gap-3 text-[10px] font-mono">
+            <span class="flex items-center gap-1 text-matrixGreen"><span class="w-2 h-2 rounded-full bg-matrixGreen"></span> Baseline (&lt;0.5)</span>
+            <span class="flex items-center gap-1 text-warningAmber"><span class="w-2 h-2 rounded-full bg-warningAmber"></span> Elevated</span>
+            <span class="flex items-center gap-1 text-neonRed"><span class="w-2 h-2 rounded-full bg-neonRed"></span> Threat (&ge;0.85)</span>
+          </div>
+        </div>
+
+        <div class="relative w-full h-64 bg-void border border-panelBorder rounded overflow-hidden">
+          <canvas id="oscilloscope-canvas" class="w-full h-full block"></canvas>
+          <div class="absolute inset-0 scanline-overlay"></div>
+        </div>
+      </div>
+
+      <!-- RIGHT: CONTINUOUS EVOLUTION TRAJECTORY (5 COLS) -->
+      <div class="lg:col-span-5 hud-box p-5 flex flex-col">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-matrixGreen">📈</span>
+            <h3 class="text-xs font-bold font-display tracking-widest text-slate-200">CONTINUOUS EVOLUTION PROGRESSION</h3>
+          </div>
+          <span id="cont-evolve-counter" class="text-[10px] font-mono text-laserCyan font-bold">0 Generations</span>
+        </div>
+
+        <div class="relative w-full h-64 bg-void border border-panelBorder rounded p-3 flex flex-col justify-between">
+          <svg id="cont-chart-svg" class="w-full h-full" viewBox="0 0 400 200">
+            <!-- Background Grid -->
+            <line x1="30" y1="20" x2="380" y2="20" stroke="#161c28" stroke-dasharray="2"/>
+            <line x1="30" y1="70" x2="380" y2="70" stroke="#161c28" stroke-dasharray="2"/>
+            <line x1="30" y1="120" x2="380" y2="120" stroke="#161c28" stroke-dasharray="2"/>
+            <line x1="30" y1="170" x2="380" y2="170" stroke="#161c28" stroke-dasharray="2"/>
+
+            <text x="5" y="25" class="fill-textMuted font-mono text-[9px]">1.00</text>
+            <text x="5" y="75" class="fill-textMuted font-mono text-[9px]">0.90</text>
+            <text x="5" y="125" class="fill-textMuted font-mono text-[9px]">0.75</text>
+            <text x="5" y="175" class="fill-textMuted font-mono text-[9px]">0.50</text>
+
+            <path id="cont-line-best" d="M 40 40 L 380 40" fill="none" stroke="#00ff88" stroke-width="2.5" stroke-linecap="round"/>
+            <path id="cont-line-avg" d="M 40 90 L 380 90" fill="none" stroke="#00f0ff" stroke-width="1.5" stroke-dasharray="3" stroke-linecap="round"/>
+            <g id="cont-chart-points"></g>
+          </svg>
+
+          <div class="flex items-center justify-between text-[10px] font-mono text-textMuted px-2">
+            <span class="flex items-center gap-1 text-matrixGreen"><span class="w-3 h-0.5 bg-matrixGreen inline-block"></span> Candidate Best</span>
+            <span class="flex items-center gap-1 text-laserCyan"><span class="w-3 h-0.5 bg-laserCyan inline-block"></span> Pop Average</span>
+            <span id="cont-chart-latest" class="text-white font-bold">Waiting for Cycle...</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- LOWER ROW: 60-SECOND VELOCITY STREAM & CONTINUOUS FORENSIC AUDIT CONSOLE -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- LEFT: 60-SECOND VELOCITY STREAM (5 COLS) -->
+      <div class="lg:col-span-5 hud-box p-5 flex flex-col">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-laserCyan">⚡</span>
+            <h3 class="text-xs font-bold font-display tracking-widest text-slate-200">THROUGHPUT VELOCITY (ROLLING 60S)</h3>
+          </div>
+          <div class="text-[10px] font-mono text-textMuted">
+            <span class="text-laserCyan font-bold" id="cont-live-pps">0</span> PPS | <span class="text-white font-bold" id="cont-live-kbps">0.0</span> KB/s
+          </div>
+        </div>
+
+        <div class="relative w-full h-48 bg-void border border-panelBorder rounded overflow-hidden">
+          <canvas id="cont-velocity-canvas" class="w-full h-full block"></canvas>
+          <div class="absolute inset-0 scanline-overlay"></div>
+        </div>
+      </div>
+
+      <!-- RIGHT: CONTINUOUS FORENSIC AUDIT CONSOLE (7 COLS) -->
+      <div class="lg:col-span-7 hud-box p-5 flex flex-col">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-matrixGreen">📜</span>
+            <h3 class="text-xs font-bold font-display tracking-widest text-slate-200">CONTINUOUS FORENSIC AUDIT TERMINAL</h3>
+          </div>
+          <button data-action="clearcontinuousauditconsole" class="px-2 py-0.5 rounded bg-panelLight hover:bg-panelBorder border border-panelBorder text-[10px] font-mono text-textMuted cursor-pointer">
+            CLEAR
+          </button>
+        </div>
+
+        <div id="cont-audit-console" class="flex-1 max-h-48 overflow-y-auto bg-void border border-panelBorder rounded p-2.5 font-mono text-[11px] space-y-1">
+          <div class="text-textMuted italic">[SYSTEM]: Continuous Sniffing, Learning & Evolving Hub ready. Awaiting loop activation.</div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+  <!-- ==================================================================== -->
+  <!-- DECK 4: OPS & AUTOMATION                                             -->
+  <!-- ==================================================================== -->
+  <main id="deck-autopilot" class="hidden flex-1 max-w-[1600px] w-full mx-auto p-4 md:p-6 flex flex-col gap-6">
+
+    <!-- Live region so status changes are announced, not just coloured -->
+    <p id="ops-live" class="sr-only" role="status" aria-live="polite"></p>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- ROLLING CAPTURE ------------------------------------------------- -->
+      <section class="lg:col-span-5 rounded-lg border border-panelBorder bg-panel/60 p-5 flex flex-col gap-4">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <h2 class="font-display font-bold text-laserCyan tracking-wide">ROLLING CAPTURE</h2>
+            <p class="text-[11px] text-textMuted mt-1 leading-relaxed">
+              Captures in chunks and archives each one by content hash. This is the
+              accelerator: capture hours are what the champion is limited by, not generations.
+            </p>
+          </div>
+          <span id="rolling-badge"
+                class="shrink-0 text-[10px] px-2 py-1 rounded border border-slate-600 text-textMuted font-bold tracking-wider">
+            STOPPED
+          </span>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <label class="flex flex-col gap-1">
+            <span class="text-[10px] text-textMuted font-bold tracking-wider">CONTEXT TAG</span>
+            <select id="rolling-tag"
+                    class="bg-void border border-panelBorder rounded px-2 py-1.5 text-sm text-slate-200
+                           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-laserCyan">
+            </select>
+          </label>
+          <label class="flex flex-col gap-1">
+            <span class="text-[10px] text-textMuted font-bold tracking-wider">CHUNK (MIN)</span>
+            <input id="rolling-minutes" type="number" min="1" max="60" value="15"
+                   class="bg-void border border-panelBorder rounded px-2 py-1.5 text-sm text-slate-200
+                          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-laserCyan">
+          </label>
+        </div>
+        <p id="rolling-tag-hint" class="text-[11px] text-textMuted -mt-2"></p>
+
+        <div class="flex gap-3">
+          <button id="btn-rolling-start" type="button" data-action="opsrollingstart"
+                  class="flex-1 px-4 py-2.5 rounded font-bold text-sm tracking-wide border
+                         border-matrixGreen/60 bg-matrixGreen/10 text-matrixGreen
+                         hover:bg-matrixGreen/20 transition
+                         disabled:opacity-40 disabled:cursor-not-allowed
+                         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-matrixGreen">
+            ▶ START CAPTURE
+          </button>
+          <button id="btn-rolling-stop" type="button" data-action="opsrollingstop" disabled
+                  class="flex-1 px-4 py-2.5 rounded font-bold text-sm tracking-wide border
+                         border-crimson/60 bg-crimson/10 text-crimson
+                         hover:bg-crimson/20 transition
+                         disabled:opacity-40 disabled:cursor-not-allowed
+                         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson">
+            ■ STOP AFTER CHUNK
+          </button>
+        </div>
+
+        <p id="rolling-detail" class="text-[11px] text-textMuted font-mono leading-relaxed"></p>
+      </section>
+
+      <!-- COVERAGE -------------------------------------------------------- -->
+      <section class="lg:col-span-7 rounded-lg border border-panelBorder bg-panel/60 p-5 flex flex-col gap-3">
+        <div class="flex items-baseline justify-between">
+          <h2 class="font-display font-bold text-laserCyan tracking-wide">CAPTURE COVERAGE</h2>
+          <span id="coverage-summary" class="text-[11px] text-textMuted font-mono"></span>
+        </div>
+        <div id="coverage-nudge"
+             class="text-[11px] rounded border border-amber-500/40 bg-amber-500/5 text-amber-300/90 px-3 py-2 leading-relaxed hidden">
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-[11px] font-mono">
+            <caption class="sr-only">Hours of traffic captured per network context</caption>
+            <thead>
+              <tr class="text-textMuted border-b border-panelBorder/70">
+                <th scope="col" class="text-left py-1.5 pr-2 font-bold tracking-wider">CONTEXT</th>
+                <th scope="col" class="text-right py-1.5 px-2 font-bold tracking-wider">CHUNKS</th>
+                <th scope="col" class="text-right py-1.5 px-2 font-bold tracking-wider">HOURS</th>
+                <th scope="col" class="text-right py-1.5 px-2 font-bold tracking-wider">PACKETS</th>
+                <th scope="col" class="text-left py-1.5 pl-2 font-bold tracking-wider">STATE</th>
+              </tr>
+            </thead>
+            <tbody id="coverage-rows"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- JOBS ------------------------------------------------------------ -->
+      <section class="lg:col-span-7 rounded-lg border border-panelBorder bg-panel/60 p-5 flex flex-col gap-4">
+        <div>
+          <h2 class="font-display font-bold text-laserCyan tracking-wide">MAINTENANCE</h2>
+          <p class="text-[11px] text-textMuted mt-1 leading-relaxed">
+            The audit re-measures rather than reading recorded numbers. The weekly cycle
+            rebuilds, retrains, recalibrates the blocking tiers and audits, in that order,
+            and refuses to promote anything that fails its holdout gate.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <button id="btn-job-audit" type="button" data-action="opsjob" data-arg="audit"
+                  class="px-3 py-2.5 rounded font-bold text-xs tracking-wide border border-laserCyan/50
+                         bg-laserCyan/10 text-laserCyan hover:bg-laserCyan/20 transition
+                         disabled:opacity-40 disabled:cursor-not-allowed
+                         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-laserCyan">
+            ⚕ RUN AUDIT
+          </button>
+          <button id="btn-job-calibrate" type="button" data-action="opsjob" data-arg="calibrate"
+                  class="px-3 py-2.5 rounded font-bold text-xs tracking-wide border border-slate-500/60
+                         bg-slate-500/10 text-slate-300 hover:bg-slate-500/20 transition
+                         disabled:opacity-40 disabled:cursor-not-allowed
+                         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
+            ⟳ RECALIBRATE TIERS
+          </button>
+          <button id="btn-job-weekly" type="button" data-action="opsjob" data-arg="weekly"
+                  class="px-3 py-2.5 rounded font-bold text-xs tracking-wide border border-matrixGreen/50
+                         bg-matrixGreen/10 text-matrixGreen hover:bg-matrixGreen/20 transition
+                         disabled:opacity-40 disabled:cursor-not-allowed
+                         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-matrixGreen">
+            ⚙ WEEKLY CYCLE
+          </button>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between text-[10px] text-textMuted font-bold tracking-wider mb-1">
+            <span>JOB OUTPUT</span>
+            <span id="job-verdict"></span>
+          </div>
+          <pre id="job-tail"
+               class="h-44 overflow-auto rounded border border-panelBorder bg-void/80 p-2
+                      text-[10px] leading-relaxed text-slate-400 whitespace-pre-wrap"
+               tabindex="0">No job run yet this session.</pre>
+        </div>
+      </section>
+
+      <!-- SCHEDULE + STATE ------------------------------------------------ -->
+      <section class="lg:col-span-5 flex flex-col gap-6">
+        <div class="rounded-lg border border-panelBorder bg-panel/60 p-5 flex flex-col gap-3">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <h2 class="font-display font-bold text-laserCyan tracking-wide">SCHEDULE</h2>
+              <p class="text-[11px] text-textMuted mt-1 leading-relaxed">
+                Audit daily 20:00, weekly cycle Sundays 21:00. Capture and the sensor are
+                deliberately not scheduled — anything touching the NIC stays in a window
+                you can see and close.
+              </p>
+            </div>
+            <span id="schedule-badge"
+                  class="shrink-0 text-[10px] px-2 py-1 rounded border border-slate-600 text-textMuted font-bold tracking-wider">
+              CHECKING
+            </span>
+          </div>
+          <button id="btn-schedule-install" type="button" data-action="opsinstallschedule"
+                  class="px-4 py-2.5 rounded font-bold text-sm tracking-wide border border-laserCyan/50
+                         bg-laserCyan/10 text-laserCyan hover:bg-laserCyan/20 transition
+                         disabled:opacity-40 disabled:cursor-not-allowed
+                         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-laserCyan">
+            ⏰ INSTALL SCHEDULED TASKS
+          </button>
+          <p id="schedule-detail" class="text-[11px] text-textMuted leading-relaxed"></p>
+        </div>
+
+        <div class="rounded-lg border border-panelBorder bg-panel/60 p-5">
+          <h2 class="font-display font-bold text-laserCyan tracking-wide mb-3">INSTALLED STATE</h2>
+          <dl id="ops-state" class="text-[11px] font-mono space-y-1.5"></dl>
+        </div>
+      </section>
+    </div>
+  </main>
+
+
+  <!-- ==================================================================== -->
+  <!-- JAVASCRIPT: SSE, CANVAS NEURAL TOPOLOGY, DOSSIER & AUDIO             -->
+  <!-- ==================================================================== -->
+  <script src="./js/app.js"></script>
+</body>
+</html>

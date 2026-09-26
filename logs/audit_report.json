@@ -1,0 +1,147 @@
+{
+  "started_utc": "2026-09-20T23:19:00.414063+00:00",
+  "finished_utc": "2026-09-20T23:19:15.003408+00:00",
+  "champion_sha256": "fa08b91f7155818105791c9c2a7806fc3f15b6ee2f28ae25fb50fac2f591f1c3",
+  "operating_point": 0.85,
+  "tier_rule": {
+    "k": 10,
+    "window_sec": 60.0
+  },
+  "verdict": "WARN",
+  "checks": [
+    {
+      "check": "fpr:home_live_baseline.pcap",
+      "status": "PASS",
+      "detail": "0.00% vs baseline 0.00% (+0.00pp)",
+      "data": {
+        "packets": 2163,
+        "scored": 1327,
+        "fpr_pct": 0.0,
+        "blocked_hosts": [],
+        "hours": 0.01665132780869802,
+        "baseline_fpr_pct": 0.0,
+        "delta_pp": 0.0
+      }
+    },
+    {
+      "check": "fpr:continuous_baseline.pcap",
+      "status": "PASS",
+      "detail": "0.44% vs baseline 0.44% (+0.00pp)",
+      "data": {
+        "packets": 19522,
+        "scored": 10228,
+        "fpr_pct": 0.4399687133359405,
+        "blocked_hosts": [],
+        "hours": 16.066430590815013,
+        "baseline_fpr_pct": 0.4399687133359405,
+        "delta_pp": 0.0
+      }
+    },
+    {
+      "check": "benign block decisions",
+      "status": "PASS",
+      "detail": "no benign host reaches the block tier across 16.1h (10 flags / 60s)",
+      "data": {}
+    },
+    {
+      "check": "tier calibration",
+      "status": "PASS",
+      "detail": "k=10 / 60s, calibrated for the installed champion",
+      "data": {}
+    },
+    {
+      "check": "operating point",
+      "status": "PASS",
+      "detail": "0.85 everywhere",
+      "data": {}
+    },
+    {
+      "check": "council seats",
+      "status": "PASS",
+      "detail": "seated ['volumetric', 'recon']; rejected ['payload'] absent from disk",
+      "data": {}
+    },
+    {
+      "check": "benign pool",
+      "status": "PASS",
+      "detail": "2 real capture(s) accepted",
+      "data": {}
+    },
+    {
+      "check": "corpus leak audit",
+      "status": "PASS",
+      "detail": "strongest single feature src_port at 0.813 separability",
+      "data": {}
+    },
+    {
+      "check": "predictive gate",
+      "status": "PASS",
+      "detail": "clean-window AUC 0.833 on 30 positives -> escalation disabled (needs AUC>=0.75 and >=100 positives)",
+      "data": {
+        "auc": 0.8333870967741935,
+        "positives": 30,
+        "armed": false
+      }
+    },
+    {
+      "check": "port diversity",
+      "status": "WARN",
+      "detail": "top 3 ports cover 99% of benign traffic (443, 53, 80, 445, 8080); 16.1h captured",
+      "data": {
+        "concentration": 0.9892682926829268,
+        "hours": 16.083081918623712,
+        "top_ports": [
+          [
+            443,
+            5201
+          ],
+          [
+            53,
+            805
+          ],
+          [
+            80,
+            78
+          ],
+          [
+            445,
+            19
+          ],
+          [
+            8080,
+            17
+          ],
+          [
+            22,
+            13
+          ],
+          [
+            8443,
+            7
+          ],
+          [
+            3333,
+            7
+          ]
+        ]
+      }
+    }
+  ],
+  "captures": {
+    "home_live_baseline.pcap": {
+      "packets": 2163,
+      "scored": 1327,
+      "fpr_pct": 0.0,
+      "blocked_hosts": [],
+      "hours": 0.01665132780869802
+    },
+    "continuous_baseline.pcap": {
+      "packets": 19522,
+      "scored": 10228,
+      "fpr_pct": 0.4399687133359405,
+      "blocked_hosts": [],
+      "hours": 16.066430590815013
+    }
+  },
+  "total_capture_hours": 16.08
+}

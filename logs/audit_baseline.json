@@ -1,0 +1,20 @@
+{
+  "recorded_utc": "2026-09-20T22:54:59.549512+00:00",
+  "champion_sha256": "fa08b91f7155818105791c9c2a7806fc3f15b6ee2f28ae25fb50fac2f591f1c3",
+  "captures": {
+    "home_live_baseline.pcap": {
+      "packets": 2163,
+      "scored": 1327,
+      "fpr_pct": 0.0,
+      "blocked_hosts": [],
+      "hours": 0.01665132780869802
+    },
+    "continuous_baseline.pcap": {
+      "packets": 19522,
+      "scored": 10228,
+      "fpr_pct": 0.4399687133359405,
+      "blocked_hosts": [],
+      "hours": 16.066430590815013
+    }
+  }
+}

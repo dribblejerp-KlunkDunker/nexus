@@ -1,0 +1,4 @@
+{"name":"nexus","version":"1.0.0","private":true,"description":"N.E.X.U.S defense platform (build tooling only; runtime is Python)",  "scripts": {
+    "build:web": "node node_modules/tailwindcss/lib/cli.js -c web/tailwind.config.js -i web/static/css/input.css -o web/static/css/app.css --minify",
+    "check": "python tools/check.py"
+  },"devDependencies":{"tailwindcss":"^3.4.17"}}

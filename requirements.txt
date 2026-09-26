@@ -1,0 +1,19 @@
+# NEXUS runtime dependencies.
+#
+# Pinned to verified-compatible ranges. scapy needs Npcap installed separately
+# on Windows (https://npcap.com) for live capture; without it everything except
+# packet capture still runs.
+neat-python>=0.92,<0.94
+scapy>=2.5,<3
+numpy>=1.24,<3
+torch>=2.0,<3
+onnx>=1.15,<2
+onnxruntime>=1.16,<2
+fastapi>=0.110,<1
+uvicorn>=0.27,<1
+pydantic>=2.0,<3
+
+# Optional. Only needed for the distributed evolution path, which the vectorized
+# evaluator in scripts/neat_vectorized.py has made unnecessary at this data
+# scale (~450 genome-evals/sec on one core against 23k vectors).
+# ray>=2.9,<3

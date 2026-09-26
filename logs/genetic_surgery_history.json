@@ -1,0 +1,645 @@
+[
+  {
+    "timestamp": "2026-09-19T18:43:03.211430",
+    "interventions": [],
+    "pre_accuracy": 1.0,
+    "pre_fn": 0,
+    "pre_fp": 0
+  },
+  {
+    "timestamp": "2026-09-19T18:46:51.102739",
+    "interventions": [],
+    "pre_accuracy": 0.9969,
+    "pre_fn": 1,
+    "pre_fp": 0
+  },
+  {
+    "timestamp": "2026-09-19T18:59:47.397043",
+    "interventions": [],
+    "pre_accuracy": 1.0,
+    "pre_fn": 0,
+    "pre_fp": 0
+  },
+  {
+    "timestamp": "2026-09-19T18:59:47.399032",
+    "interventions": [
+      {
+        "action": "GRAFTED_INHIBITORY_SHIELD",
+        "sensor_node": -6,
+        "sensor_name": "is_ack",
+        "target_node": 0,
+        "weight": -2.7065,
+        "rationale": "Inhibit False Alarms using benign baseline feature"
+      }
+    ],
+    "pre_accuracy": 0.75,
+    "pre_fn": 0,
+    "pre_fp": 80
+  },
+  {
+    "timestamp": "2026-09-19T19:07:17.903596",
+    "interventions": [],
+    "pre_accuracy": 1.0,
+    "pre_fn": 0,
+    "pre_fp": 0
+  },
+  {
+    "timestamp": "2026-09-19T19:07:17.904819",
+    "interventions": [
+      {
+        "action": "GRAFTED_EXCITATORY_SYNAPSE",
+        "sensor_node": -12,
+        "sensor_name": "stream_rate",
+        "target_node": 0,
+        "weight": 2.1298,
+        "rationale": "Resolve False Negatives on high-signal sensor (0.975)"
+      },
+      {
+        "action": "GRAFTED_EXCITATORY_SYNAPSE",
+        "sensor_node": -19,
+        "sensor_name": "win_to_len_ratio",
+        "target_node": 0,
+        "weight": 2.3497,
+        "rationale": "Resolve False Negatives on high-signal sensor (0.8333)"
+      },
+      {
+        "action": "GRAFTED_EXCITATORY_SYNAPSE",
+        "sensor_node": -18,
+        "sensor_name": "is_push",
+        "target_node": 0,
+        "weight": 2.6545,
+        "rationale": "Resolve False Negatives on high-signal sensor (0.7042)"
+      }
+    ],
+    "pre_accuracy": 0.25,
+    "pre_fn": 240,
+    "pre_fp": 0
+  },
+  {
+    "timestamp": "2026-09-19T19:18:50.697490",
+    "interventions": [
+      {
+        "action": "REINFORCED_CONNECTION",
+        "sensor_node": -12,
+        "sensor_name": "stream_rate",
+        "target_node": 0,
+        "weight": 3.0647,
+        "rationale": "Resolve False Negatives on high-signal sensor (0.8827)"
+      },
+      {
+        "action": "REINFORCED_CONNECTION",
+        "sensor_node": -3,
+        "sensor_name": "src_port",
+        "target_node": 0,
+        "weight": 3.0839,
+        "rationale": "Resolve False Negatives on high-signal sensor (0.7573)"
+      }
+    ],
+    "pre_accuracy": 0.8642,
+    "pre_fn": 163,
+    "pre_fp": 0
+  },
+  {
+    "timestamp": "2026-09-19T19:18:51.229791",
+    "interventions": [
+      {
+        "action": "REINFORCED_CONNECTION",
+        "sensor_node": -12,
+        "sensor_name": "stream_rate",
+        "target_node": 0,
+        "weight": 2.6998,
+        "rationale": "Resolve False Negatives on high-signal sensor (0.8827)"
+      },
+      {
+        "action": "REINFORCED_CONNECTION",
+        "sensor_node": -3,
+        "sensor_name": "src_port",
+        "target_node": 0,
+        "weight": 2.586,
+        "rationale": "Resolve False Negatives on high-signal sensor (0.7573)"
+      },
+      {
+        "action": "GRAFTED_INTERMEDIARY_NODE",
+        "node_id": 1,
+        "activation": "relu",
+        "sensor_source": -12,
+        "rationale": "Add non-linear abstraction layer for complex multi-sensor synergy"
+      }
+    ],
+    "pre_accuracy": 0.8642,
+    "pre_fn": 163,
+    "pre_fp": 0
+  },
+  {
+    "timestamp": "2026-09-19T19:42:38.505917",
+    "interventions": [
+      {
+        "action": "RECALIBRATED_OUTPUT_BIAS",
+        "old_bias": -2.5,
+        "new_bias": -0.5,
+        "rationale": "Reset over-depressed bias causing chronic false negatives"
+      },
+      {
+        "action": "REINFORCED_CONNECTION",
+        "sensor_node": -4,
+        "sensor_name": "dst_port",
+        "target_node": 0,
+        "weight": 2.2315,
+        "rationale": "Resolve False Negatives on high-signal sensor (0.878)"
+      },
+      {
+        "action": "REINFORCED_CONNECTION",
+        "sensor_node": -6,
+        "sensor_name": "is_ack",
+        "target_node": 0,
+        "weight": 2.0734,
+        "rationale": "Resolve False Negatives on high-signal sensor (0.8533)"
+      },
+      {
+        "action": "GRAFTED_INTERMEDIARY_NODE",
+        "node_id": 1,
+        "activation": "relu",
+        "sensor_source": -4,
+        "rationale": "Add non-linear abstraction layer for complex multi-sensor synergy"
+      }
+    ],
+    "pre_accuracy": 0.0,
+    "pre_fn": 40,
+    "pre_fp": 0
+  },
+  {
+    "timestamp": "2026-09-19T19:43:15.436343",
+    "interventions": [
+      {
+        "action": "RECALIBRATED_OUTPUT_BIAS",
+        "old_bias": -2.5,
+        "new_bias": -0.5,
+        "rationale": "Reset over-depressed bias causing chronic false negatives"
+      },
+      {
+        "action": "REINFORCED_CONNECTION",
+        "sensor_node": -2,
+        "sensor_name": "protocol",
+        "target_node": 0,
+        "weight": 2.0475,
+        "rationale": "Resolve False Negatives on high-signal sensor (0.8748)"
+      },
+      {
+        "action": "REINFORCED_CONNECTION",
+        "sensor_node": -5,
+        "sensor_name": "is_syn",
+        "target_node": 0,
+        "weight": 2.9803,
+        "rationale": "Resolve False Negatives on high-signal sensor (0.8488)"
+      }
+    ],
+    "pre_accuracy": 0.0,
+    "pre_fn": 40,
+    "pre_fp": 0
+  },
+  {
+    "timestamp": "2026-09-19T19:47:37.117829",
+    "interventions": [],
+    "pre_accuracy": 1.0,
+    "pre_fn": 0,
+    "pre_fp": 0
+  },
+  {
+    "timestamp": "2026-09-19T19:47:49.752802",
+    "interventions": [],
+    "pre_accuracy": 1.0,
+    "pre_fn": 0,
+    "pre_fp": 0
+  },
+  {
+    "timestamp": "2026-09-19T19:48:02.428739",
+    "interventions": [
+      {
+        "action": "RECALIBRATED_OUTPUT_BIAS",
+        "old_bias": -2.0,
+        "new_bias": -0.5,
+        "rationale": "Reset over-depressed bias causing chronic false negatives"
+      },
+      {
+        "action": "GRAFTED_EXCITATORY_SYNAPSE",
+        "sensor_node": -4,
+        "sensor_name": "dst_port",
+        "target_node": 0,
+        "weight": 2.4305,
+        "rationale": "Resolve False Negatives on high-signal sensor (0.779)"
+      },
+      {
+        "action": "GRAFTED_EXCITATORY_SYNAPSE",
+        "sensor_node": -5,
+        "sensor_name": "is_syn",
+        "target_node": 0,
+        "weight": 2.5788,
+        "rationale": "Resolve False Negatives on high-signal sensor (0.7738)"
+      },
+      {
+        "action": "GRAFTED_INTERMEDIARY_NODE",
+        "node_id": 1,
+        "activation": "relu",
+        "sensor_source": -4,
+        "rationale": "Add non-linear abstraction layer for complex multi-sensor synergy"
+      }
+    ],
+    "pre_accuracy": 0.0,
+    "pre_fn": 40,
+    "pre_fp": 0
+  },
+  {
+    "timestamp": "2026-09-19T19:48:35.039154",
+    "interventions": [
+      {
+        "action": "RECALIBRATED_OUTPUT_BIAS",
+        "old_bias": -2.0,
+        "new_bias": -0.5,
+        "rationale": "Reset over-depressed bias causing chronic false negatives"
+      },
+      {
+        "action": "GRAFTED_EXCITATORY_SYNAPSE",
+        "sensor_node": -1,
+        "sensor_name": "packet_len",
+        "target_node": 0,
+        "weight": 2.7783,
+        "rationale": "Resolve False Negatives on high-signal sensor (0.8048)"
+      },
+      {
+        "action": "GRAFTED_EXCITATORY_SYNAPSE",
+        "sensor_node": -7,
+        "sensor_name": "is_fin_rst",
+        "target_node": 0,
+        "weight": 2.8582,
+        "rationale": "Resolve False Negatives on high-signal sensor (0.7696)"
+      },
+      {
+        "action": "GRAFTED_INTERMEDIARY_NODE",
+        "node_id": 1,
+        "activation": "relu",
+        "sensor_source": -1,
+        "rationale": "Add non-linear abstraction layer for complex multi-sensor synergy"
+      }
+    ],
+    "pre_accuracy": 0.0,
+    "pre_fn": 40,
+    "pre_fp": 0
+  },
+  {
+    "timestamp": "2026-09-19T21:03:18.112095",
+    "interventions": [
+      {
+        "action": "GRAFTED_INTERMEDIARY_NODE",
+        "node_id": 1,
+        "activation": "relu",
+        "sensor_source": -1,
+        "rationale": "Add non-linear abstraction layer for complex multi-sensor synergy"
+      }
+    ],
+    "pre_accuracy": 1.0,
+    "pre_fn": 0,
+    "pre_fp": 0
+  },
+  {
+    "timestamp": "2026-09-20T01:28:23.244493",
+    "interventions": [
+      {
+        "action": "RECALIBRATED_OUTPUT_BIAS",
+        "old_bias": -2.0,
+        "new_bias": -0.5,
+        "rationale": "Reset over-depressed bias causing chronic false negatives"
+      },
+      {
+        "action": "GRAFTED_EXCITATORY_SYNAPSE",
+        "sensor_node": -4,
+        "sensor_name": "dst_port",
+        "target_node": 0,
+        "weight": 2.1382,
+        "rationale": "Resolve False Negatives on high-signal sensor (0.7992)"
+      },
+      {
+        "action": "GRAFTED_EXCITATORY_SYNAPSE",
+        "sensor_node": -7,
+        "sensor_name": "is_fin_rst",
+        "target_node": 0,
+        "weight": 3.0932,
+        "rationale": "Resolve False Negatives on high-signal sensor (0.7779)"
+      },
+      {
+        "action": "GRAFTED_INTERMEDIARY_NODE",
+        "node_id": 1,
+        "activation": "relu",
+        "sensor_source": -4,
+        "rationale": "Add non-linear abstraction layer for complex multi-sensor synergy"
+      }
+    ],
+    "pre_accuracy": 0.0,
+    "pre_fn": 40,
+    "pre_fp": 0
+  },
+  {
+    "timestamp": "2026-09-20T01:29:16.208698",
+    "interventions": [
+      {
+        "action": "RECALIBRATED_OUTPUT_BIAS",
+        "old_bias": -2.0,
+        "new_bias": -0.5,
+        "rationale": "Reset over-depressed bias causing chronic false negatives"
+      },
+      {
+        "action": "GRAFTED_EXCITATORY_SYNAPSE",
+        "sensor_node": -4,
+        "sensor_name": "dst_port",
+        "target_node": 0,
+        "weight": 2.8196,
+        "rationale": "Resolve False Negatives on high-signal sensor (0.7847)"
+      },
+      {
+        "action": "GRAFTED_EXCITATORY_SYNAPSE",
+        "sensor_node": -5,
+        "sensor_name": "is_syn",
+        "target_node": 0,
+        "weight": 2.2175,
+        "rationale": "Resolve False Negatives on high-signal sensor (0.7817)"
+      },
+      {
+        "action": "GRAFTED_INTERMEDIARY_NODE",
+        "node_id": 1,
+        "activation": "relu",
+        "sensor_source": -4,
+        "rationale": "Add non-linear abstraction layer for complex multi-sensor synergy"
+      }
+    ],
+    "pre_accuracy": 0.0,
+    "pre_fn": 40,
+    "pre_fp": 0
+  },
+  {
+    "timestamp": "2026-09-20T01:31:29.168708",
+    "interventions": [
+      {
+        "action": "RECALIBRATED_OUTPUT_BIAS",
+        "old_bias": -2.0,
+        "new_bias": -0.5,
+        "rationale": "Reset over-depressed bias causing chronic false negatives"
+      },
+      {
+        "action": "GRAFTED_EXCITATORY_SYNAPSE",
+        "sensor_node": -7,
+        "sensor_name": "is_fin_rst",
+        "target_node": 0,
+        "weight": 2.84,
+        "rationale": "Resolve False Negatives on high-signal sensor (0.7945)"
+      },
+      {
+        "action": "GRAFTED_EXCITATORY_SYNAPSE",
+        "sensor_node": -3,
+        "sensor_name": "src_port",
+        "target_node": 0,
+        "weight": 3.1244,
+        "rationale": "Resolve False Negatives on high-signal sensor (0.7878)"
+      },
+      {
+        "action": "GRAFTED_INTERMEDIARY_NODE",
+        "node_id": 1,
+        "activation": "relu",
+        "sensor_source": -7,
+        "rationale": "Add non-linear abstraction layer for complex multi-sensor synergy"
+      }
+    ],
+    "pre_accuracy": 0.0,
+    "pre_fn": 40,
+    "pre_fp": 0
+  },
+  {
+    "timestamp": "2026-09-20T01:45:14.164861",
+    "interventions": [
+      {
+        "action": "RECALIBRATED_OUTPUT_BIAS",
+        "old_bias": -2.0,
+        "new_bias": -0.5,
+        "rationale": "Reset over-depressed bias causing chronic false negatives"
+      },
+      {
+        "action": "GRAFTED_EXCITATORY_SYNAPSE",
+        "sensor_node": -3,
+        "sensor_name": "src_port",
+        "target_node": 0,
+        "weight": 2.2672,
+        "rationale": "Resolve False Negatives on high-signal sensor (0.7855)"
+      },
+      {
+        "action": "GRAFTED_EXCITATORY_SYNAPSE",
+        "sensor_node": -5,
+        "sensor_name": "is_syn",
+        "target_node": 0,
+        "weight": 2.0712,
+        "rationale": "Resolve False Negatives on high-signal sensor (0.7806)"
+      }
+    ],
+    "pre_accuracy": 0.0,
+    "pre_fn": 40,
+    "pre_fp": 0
+  },
+  {
+    "timestamp": "2026-09-20T13:49:08.426687",
+    "interventions": [
+      {
+        "action": "RECALIBRATED_OUTPUT_BIAS",
+        "old_bias": -2.0,
+        "new_bias": -0.5,
+        "rationale": "Reset over-depressed bias causing chronic false negatives"
+      },
+      {
+        "action": "GRAFTED_EXCITATORY_SYNAPSE",
+        "sensor_node": -3,
+        "sensor_name": "src_port",
+        "target_node": 0,
+        "weight": 2.2676,
+        "rationale": "Resolve False Negatives on high-signal sensor (0.7603)"
+      },
+      {
+        "action": "GRAFTED_EXCITATORY_SYNAPSE",
+        "sensor_node": -7,
+        "sensor_name": "is_fin_rst",
+        "target_node": 0,
+        "weight": 2.7896,
+        "rationale": "Resolve False Negatives on high-signal sensor (0.742)"
+      },
+      {
+        "action": "GRAFTED_INTERMEDIARY_NODE",
+        "node_id": 1,
+        "activation": "relu",
+        "sensor_source": -3,
+        "rationale": "Add non-linear abstraction layer for complex multi-sensor synergy"
+      }
+    ],
+    "pre_accuracy": 0.0,
+    "pre_fn": 40,
+    "pre_fp": 0
+  },
+  {
+    "timestamp": "2026-09-20T13:49:19.493737",
+    "interventions": [
+      {
+        "action": "RECALIBRATED_OUTPUT_BIAS",
+        "old_bias": -2.0,
+        "new_bias": -0.5,
+        "rationale": "Reset over-depressed bias causing chronic false negatives"
+      },
+      {
+        "action": "GRAFTED_EXCITATORY_SYNAPSE",
+        "sensor_node": -4,
+        "sensor_name": "dst_port",
+        "target_node": 0,
+        "weight": 2.0441,
+        "rationale": "Resolve False Negatives on high-signal sensor (0.7697)"
+      },
+      {
+        "action": "GRAFTED_EXCITATORY_SYNAPSE",
+        "sensor_node": -3,
+        "sensor_name": "src_port",
+        "target_node": 0,
+        "weight": 2.7116,
+        "rationale": "Resolve False Negatives on high-signal sensor (0.766)"
+      },
+      {
+        "action": "GRAFTED_INTERMEDIARY_NODE",
+        "node_id": 1,
+        "activation": "relu",
+        "sensor_source": -4,
+        "rationale": "Add non-linear abstraction layer for complex multi-sensor synergy"
+      }
+    ],
+    "pre_accuracy": 0.0,
+    "pre_fn": 40,
+    "pre_fp": 0
+  },
+  {
+    "timestamp": "2026-09-20T13:49:47.941646",
+    "interventions": [
+      {
+        "action": "RECALIBRATED_OUTPUT_BIAS",
+        "old_bias": -2.0,
+        "new_bias": -0.5,
+        "rationale": "Reset over-depressed bias causing chronic false negatives"
+      },
+      {
+        "action": "GRAFTED_EXCITATORY_SYNAPSE",
+        "sensor_node": -6,
+        "sensor_name": "is_ack",
+        "target_node": 0,
+        "weight": 3.0976,
+        "rationale": "Resolve False Negatives on high-signal sensor (0.7666)"
+      },
+      {
+        "action": "GRAFTED_EXCITATORY_SYNAPSE",
+        "sensor_node": -3,
+        "sensor_name": "src_port",
+        "target_node": 0,
+        "weight": 3.0445,
+        "rationale": "Resolve False Negatives on high-signal sensor (0.7626)"
+      },
+      {
+        "action": "GRAFTED_INTERMEDIARY_NODE",
+        "node_id": 1,
+        "activation": "relu",
+        "sensor_source": -6,
+        "rationale": "Add non-linear abstraction layer for complex multi-sensor synergy"
+      }
+    ],
+    "pre_accuracy": 0.0,
+    "pre_fn": 40,
+    "pre_fp": 0
+  },
+  {
+    "timestamp": "2026-09-20T17:39:19.273654",
+    "interventions": [
+      {
+        "action": "RECALIBRATED_OUTPUT_BIAS",
+        "old_bias": -2.0,
+        "new_bias": -0.5,
+        "rationale": "Reset over-depressed bias causing chronic false negatives"
+      },
+      {
+        "action": "GRAFTED_EXCITATORY_SYNAPSE",
+        "sensor_node": -2,
+        "sensor_name": "protocol",
+        "target_node": 0,
+        "weight": 3.1711,
+        "rationale": "Resolve False Negatives on high-signal sensor (0.7754)"
+      },
+      {
+        "action": "GRAFTED_EXCITATORY_SYNAPSE",
+        "sensor_node": -5,
+        "sensor_name": "is_syn",
+        "target_node": 0,
+        "weight": 2.3432,
+        "rationale": "Resolve False Negatives on high-signal sensor (0.7614)"
+      }
+    ],
+    "pre_accuracy": 0.0,
+    "pre_fn": 40,
+    "pre_fp": 0
+  },
+  {
+    "timestamp": "2026-09-20T18:06:02.933685",
+    "interventions": [
+      {
+        "action": "RECALIBRATED_OUTPUT_BIAS",
+        "old_bias": -2.0,
+        "new_bias": -0.5,
+        "rationale": "Reset over-depressed bias causing chronic false negatives"
+      },
+      {
+        "action": "GRAFTED_EXCITATORY_SYNAPSE",
+        "sensor_node": -4,
+        "sensor_name": "dst_port",
+        "target_node": 0,
+        "weight": 2.6935,
+        "rationale": "Resolve False Negatives on high-signal sensor (0.7873)"
+      },
+      {
+        "action": "GRAFTED_EXCITATORY_SYNAPSE",
+        "sensor_node": -2,
+        "sensor_name": "protocol",
+        "target_node": 0,
+        "weight": 2.3255,
+        "rationale": "Resolve False Negatives on high-signal sensor (0.7709)"
+      }
+    ],
+    "pre_accuracy": 0.0,
+    "pre_fn": 40,
+    "pre_fp": 0
+  },
+  {
+    "timestamp": "2026-09-20T18:55:10.408980",
+    "interventions": [
+      {
+        "action": "RECALIBRATED_OUTPUT_BIAS",
+        "old_bias": -2.0,
+        "new_bias": -0.5,
+        "rationale": "Reset over-depressed bias causing chronic false negatives"
+      },
+      {
+        "action": "GRAFTED_EXCITATORY_SYNAPSE",
+        "sensor_node": -6,
+        "sensor_name": "is_ack",
+        "target_node": 0,
+        "weight": 3.0822,
+        "rationale": "Resolve False Negatives on high-signal sensor (0.787)"
+      },
+      {
+        "action": "GRAFTED_EXCITATORY_SYNAPSE",
+        "sensor_node": -1,
+        "sensor_name": "packet_len",
+        "target_node": 0,
+        "weight": 2.4307,
+        "rationale": "Resolve False Negatives on high-signal sensor (0.7729)"
+      }
+    ],
+    "pre_accuracy": 0.0,
+    "pre_fn": 40,
+    "pre_fp": 0
+  }
+]

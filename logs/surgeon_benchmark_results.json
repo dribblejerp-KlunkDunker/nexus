@@ -1,0 +1,177 @@
+{
+  "timestamp": "2026-09-19T19:18:56.638761",
+  "generations": 12,
+  "pop_size": 40,
+  "speedup_factor": 1.0,
+  "standard": {
+    "gen_to_90": 3,
+    "final_accuracy": 100.0,
+    "duration_seconds": 5.94,
+    "history": [
+      {
+        "gen": 1,
+        "best_fitness": 0.8532,
+        "val_accuracy": 86.42,
+        "connections": 20
+      },
+      {
+        "gen": 2,
+        "best_fitness": 0.8532,
+        "val_accuracy": 86.42,
+        "connections": 20
+      },
+      {
+        "gen": 3,
+        "best_fitness": 1.0,
+        "val_accuracy": 100.0,
+        "connections": 24
+      },
+      {
+        "gen": 4,
+        "best_fitness": 1.0,
+        "val_accuracy": 100.0,
+        "connections": 24
+      },
+      {
+        "gen": 5,
+        "best_fitness": 1.0,
+        "val_accuracy": 100.0,
+        "connections": 24
+      },
+      {
+        "gen": 6,
+        "best_fitness": 1.0,
+        "val_accuracy": 100.0,
+        "connections": 24
+      },
+      {
+        "gen": 7,
+        "best_fitness": 1.0,
+        "val_accuracy": 100.0,
+        "connections": 24
+      },
+      {
+        "gen": 8,
+        "best_fitness": 1.0,
+        "val_accuracy": 100.0,
+        "connections": 24
+      },
+      {
+        "gen": 9,
+        "best_fitness": 1.0,
+        "val_accuracy": 100.0,
+        "connections": 24
+      },
+      {
+        "gen": 10,
+        "best_fitness": 1.0,
+        "val_accuracy": 100.0,
+        "connections": 24
+      },
+      {
+        "gen": 11,
+        "best_fitness": 1.0,
+        "val_accuracy": 100.0,
+        "connections": 24
+      },
+      {
+        "gen": 12,
+        "best_fitness": 1.0,
+        "val_accuracy": 100.0,
+        "connections": 24
+      }
+    ]
+  },
+  "surgeon": {
+    "gen_to_90": 3,
+    "final_accuracy": 100.0,
+    "duration_seconds": 6.44,
+    "surgeries_count": 5,
+    "history": [
+      {
+        "gen": 1,
+        "best_fitness": 0.8532,
+        "val_accuracy": 86.42,
+        "connections": 20,
+        "surgeries": true
+      },
+      {
+        "gen": 2,
+        "best_fitness": 0.8532,
+        "val_accuracy": 86.42,
+        "connections": 20,
+        "surgeries": true
+      },
+      {
+        "gen": 3,
+        "best_fitness": 1.0,
+        "val_accuracy": 100.0,
+        "connections": 24,
+        "surgeries": false
+      },
+      {
+        "gen": 4,
+        "best_fitness": 1.0,
+        "val_accuracy": 100.0,
+        "connections": 24,
+        "surgeries": false
+      },
+      {
+        "gen": 5,
+        "best_fitness": 1.0,
+        "val_accuracy": 100.0,
+        "connections": 24,
+        "surgeries": false
+      },
+      {
+        "gen": 6,
+        "best_fitness": 1.0,
+        "val_accuracy": 100.0,
+        "connections": 24,
+        "surgeries": false
+      },
+      {
+        "gen": 7,
+        "best_fitness": 1.0,
+        "val_accuracy": 100.0,
+        "connections": 24,
+        "surgeries": false
+      },
+      {
+        "gen": 8,
+        "best_fitness": 1.0,
+        "val_accuracy": 100.0,
+        "connections": 24,
+        "surgeries": false
+      },
+      {
+        "gen": 9,
+        "best_fitness": 1.0,
+        "val_accuracy": 100.0,
+        "connections": 24,
+        "surgeries": false
+      },
+      {
+        "gen": 10,
+        "best_fitness": 1.0,
+        "val_accuracy": 100.0,
+        "connections": 24,
+        "surgeries": false
+      },
+      {
+        "gen": 11,
+        "best_fitness": 1.0,
+        "val_accuracy": 100.0,
+        "connections": 24,
+        "surgeries": false
+      },
+      {
+        "gen": 12,
+        "best_fitness": 1.0,
+        "val_accuracy": 100.0,
+        "connections": 24,
+        "surgeries": false
+      }
+    ]
+  }
+}
