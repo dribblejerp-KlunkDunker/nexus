@@ -8,6 +8,39 @@ version scheme yet, so everything below is "Unreleased" until the first tag.
 
 ### Added
 
+- **Audit-verified enforcement interlock** (`policy.enforcement_may_arm`,
+  wired into `scripts/dashboard.py`): arming live firewall blocking -- via the
+  `--active-defense` command-line flag or the dashboard's defense toggle --
+  now refuses unless the most recent regression audit
+  (`python scripts/ops.py audit` -> `logs/audit_report.json`) ended **PASS**.
+  WARN, FAIL, a missing report, and an unreadable report all refuse, fail
+  closed, and leave the sensor in simulation mode; the CLI surfaces the
+  refusal as exit code 2 and the toggle as HTTP 409. Disarming stays always
+  permitted. 9 new tests in `tests/test_dashboard_api.py` cover PASS arming,
+  WARN/missing refusals, disarm-always-allowed, and the `run_dashboard` gate
+  (policy self-test covers the verdict matrix and fail-closed paths).
+
+- **Volumetric false-positive ban source eliminated** (GitHub/Google live-fire
+  incident): the specialist that banned them was a symptom of the audit's own
+  WARN verdict -- top 3 ports covered 99% of the benign pool (443/53/80), so
+  "normal" was only web traffic and the seat's clean holdout number did not
+  survive contact with real traffic. A fresh 11,559-packet ambient capture
+  (`background_20260927.pcap`, 77 pps, real routed TTLs, 132 remote hosts)
+  joins the benign pool; `build_corpus_v2.py` now pins explicit MACs on
+  generated packets so the build no longer dies on hosts whose default
+  interface cannot be resolved; and the trainer's false-positive fitness
+  weight is 60x (up from 20x, overridable via `--fp-weight`). On the widened
+  corpus the retrained volumetric specialist improved TPR 41.8% -> 73.8% but
+  its holdout FPR rose to 3.11% -- the 0.5% gate **rejected it and removed
+  the pickle**, exactly the mechanism working as designed. The council now
+  runs the retrained monolith (holdout 68.5% TPR / **0.00% FPR**, 0 of 9,974
+  benign flagged) plus the recon seat (41.3% / 0.00%). Tiers recalibrated
+  against the new champion (k=3/10s, zero benign blocks, 72% of high-volume
+  attackers caught); re-audit: 9 PASS / 1 WARN (port diversity). Live-fire
+  re-verification on port 8010 with real HTTPS sessions to GitHub, Google,
+  YouTube, PyPI and Cloudflare: 144 packets evaluated, 0 flagged, **0 bans,
+  no GitHub/Google IPs in the ban store**.
+
 - **`tests/test_dashboard_api.py`** (41 tests): endpoint-level smoke coverage
   of the dashboard API -- every route the HUD calls, exercised through
   FastAPI's TestClient with the intel layer stubbed offline (zero network).

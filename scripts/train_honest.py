@@ -7,9 +7,11 @@ holdout is a capture session the evolver never sees.
 
 Differences from train_for_real.py that matter to the resulting numbers:
 
-* Fitness penalises false positives ~20x harder than misses. On a home sensor a
-  false positive puts a real CDN into the firewall; a miss costs one packet of
-  detection on a flood that will send thousands more.
+* Fitness penalises false positives ~60x harder than misses. On a home sensor a
+  false positive puts a real CDN into the firewall -- the live-fire run that
+  banned GitHub and Google was exactly this failure, trained into the genome by
+  a 20x weight that a 1%-FPR population could still afford. A miss costs one
+  packet of detection on a flood that will send thousands more.
 * The reported operating point is the one the runtime actually uses (0.85),
   not 0.5.
 * Promotion is gated on the held-out capture, and the gate is the number the
@@ -36,8 +38,11 @@ CYAN = "\033[96m"; GREEN = "\033[92m"; YELLOW = "\033[93m"; RED = "\033[91m"
 BOLD = "\033[1m"; RESET = "\033[0m"
 
 # A false positive firewalls a real host. A false negative costs one packet of
-# detection on an attack that is, by nature, repetitive.
-FP_WEIGHT = 20.0
+# detection on an attack that is, by nature, repetitive. 20x still left the
+# volumetric specialist banning GitHub/Google on background traffic (36% TPR
+# was being bought with borderline benign scores); 60x makes the safe side of
+# the margin worth several times more than the last few points of catch rate.
+FP_WEIGHT = 60.0
 
 SPECIALISTS = {
     "volumetric": (VOLUMETRIC_INDICES, "config/config-council-volumetric.txt", "genomes/council_volumetric.pkl"),
@@ -126,13 +131,19 @@ def report(name, genome, cfg, X, y, indices=None):
 
 
 def main():
+    global FP_WEIGHT
     ap = argparse.ArgumentParser(description="NEXUS honest trainer")
     ap.add_argument("--corpus", default="data/corpus_v2.npz")
     ap.add_argument("--generations", type=int, default=40)
     ap.add_argument("--max-fpr", type=float, default=0.005,
                     help="Holdout FPR gate for promotion (default 0.5%%, matching the README)")
+    ap.add_argument("--fp-weight", type=float, default=None,
+                    help="Override the false-positive fitness weight "
+                         "(default: %.0f)" % FP_WEIGHT)
     ap.add_argument("--no-promote", action="store_true")
     args = ap.parse_args()
+    if args.fp_weight is not None and args.fp_weight > 0:
+        FP_WEIGHT = float(args.fp_weight)
 
     d = np.load(args.corpus, allow_pickle=True)
     X_tr, y_tr, X_va, y_va = d["X_train"], d["y_train"], d["X_val"], d["y_val"]

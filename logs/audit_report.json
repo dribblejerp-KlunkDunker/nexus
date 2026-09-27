@@ -1,14 +1,26 @@
 {
-  "started_utc": "2026-09-20T23:19:00.414063+00:00",
-  "finished_utc": "2026-09-20T23:19:15.003408+00:00",
-  "champion_sha256": "fa08b91f7155818105791c9c2a7806fc3f15b6ee2f28ae25fb50fac2f591f1c3",
+  "started_utc": "2026-09-27T10:06:24.223023+00:00",
+  "finished_utc": "2026-09-27T10:06:37.740360+00:00",
+  "champion_sha256": "1f5969f7902a8cc3fa868d311819b0da5dd324b1d2bd5b92c2c5d5c447f9ca8c",
   "operating_point": 0.85,
   "tier_rule": {
-    "k": 10,
-    "window_sec": 60.0
+    "k": 3,
+    "window_sec": 10.0
   },
   "verdict": "WARN",
   "checks": [
+    {
+      "check": "fpr:background_20260927.pcap",
+      "status": "PASS",
+      "detail": "0.00% (5953 scored pkts, no baseline yet)",
+      "data": {
+        "packets": 11559,
+        "scored": 5953,
+        "fpr_pct": 0.0,
+        "blocked_hosts": [],
+        "hours": 0.041645911931991575
+      }
+    },
     {
       "check": "fpr:home_live_baseline.pcap",
       "status": "PASS",
@@ -26,27 +38,27 @@
     {
       "check": "fpr:continuous_baseline.pcap",
       "status": "PASS",
-      "detail": "0.44% vs baseline 0.44% (+0.00pp)",
+      "detail": "0.35% vs baseline 0.44% (-0.09pp)",
       "data": {
         "packets": 19522,
         "scored": 10228,
-        "fpr_pct": 0.4399687133359405,
+        "fpr_pct": 0.35197497066875244,
         "blocked_hosts": [],
         "hours": 16.066430590815013,
         "baseline_fpr_pct": 0.4399687133359405,
-        "delta_pp": 0.0
+        "delta_pp": -0.08799374266718807
       }
     },
     {
       "check": "benign block decisions",
       "status": "PASS",
-      "detail": "no benign host reaches the block tier across 16.1h (10 flags / 60s)",
+      "detail": "no benign host reaches the block tier across 16.1h (3 flags / 10s)",
       "data": {}
     },
     {
       "check": "tier calibration",
       "status": "PASS",
-      "detail": "k=10 / 60s, calibrated for the installed champion",
+      "detail": "k=3 / 10s, calibrated for the installed champion",
       "data": {}
     },
     {
@@ -58,19 +70,19 @@
     {
       "check": "council seats",
       "status": "PASS",
-      "detail": "seated ['volumetric', 'recon']; rejected ['payload'] absent from disk",
+      "detail": "seated ['recon']; rejected ['volumetric', 'payload'] absent from disk",
       "data": {}
     },
     {
       "check": "benign pool",
       "status": "PASS",
-      "detail": "2 real capture(s) accepted",
+      "detail": "3 real capture(s) accepted",
       "data": {}
     },
     {
       "check": "corpus leak audit",
       "status": "PASS",
-      "detail": "strongest single feature src_port at 0.813 separability",
+      "detail": "strongest single feature tcp_window at 0.797 separability",
       "data": {}
     },
     {
@@ -88,12 +100,12 @@
       "status": "WARN",
       "detail": "top 3 ports cover 99% of benign traffic (443, 53, 80, 445, 8080); 16.1h captured",
       "data": {
-        "concentration": 0.9892682926829268,
-        "hours": 16.083081918623712,
+        "concentration": 0.9934898402051686,
+        "hours": 16.124727830555702,
         "top_ports": [
           [
             443,
-            5201
+            9189
           ],
           [
             53,
@@ -128,6 +140,13 @@
     }
   ],
   "captures": {
+    "background_20260927.pcap": {
+      "packets": 11559,
+      "scored": 5953,
+      "fpr_pct": 0.0,
+      "blocked_hosts": [],
+      "hours": 0.041645911931991575
+    },
     "home_live_baseline.pcap": {
       "packets": 2163,
       "scored": 1327,
@@ -138,10 +157,10 @@
     "continuous_baseline.pcap": {
       "packets": 19522,
       "scored": 10228,
-      "fpr_pct": 0.4399687133359405,
+      "fpr_pct": 0.35197497066875244,
       "blocked_hosts": [],
       "hours": 16.066430590815013
     }
   },
-  "total_capture_hours": 16.08
+  "total_capture_hours": 16.12
 }

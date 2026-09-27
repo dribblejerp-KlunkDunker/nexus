@@ -35,9 +35,12 @@ it: RUN AUDIT, RECALIBRATE TIERS, WEEKLY CYCLE.
 
 **Blocking is off.** The sensor runs in shadow mode: it alerts, it never writes a
 Windows Firewall rule. Nothing reachable from the dashboard can arm it. Arming is
-`python scripts/sniff_and_respond.py --active-defense`, and it should wait until a
-full week of audits comes back clean. See *Known limitations* below for why that
-matters more than it sounds.
+`python scripts/sniff_and_respond.py --active-defense`, and it is gated by the
+audit-verified interlock: both `--active-defense` (dashboard or guardian) and
+the dashboard's defense toggle refuse to arm unless the most recent regression
+audit (`python scripts/ops.py audit`) ended **PASS** — WARN, FAIL, or a missing
+report all refuse, fail closed, and leave the sensor in simulation mode.
+See *Known limitations* below for why that matters more than it sounds.
 
 **Dashboard controls are loopback-only.** Bound anywhere but `127.0.0.1`, the
 buttons refuse to act rather than letting anyone on the network start captures or
@@ -373,7 +376,8 @@ python scripts/distributed_ray_evolve.py --address ray://<HEAD_IP>:10001 --gener
 # Run FastAPI server on port 8000:
 python scripts/dashboard.py --port 8000
 
-# With active defense (enforces live Windows firewall blocks for flagged threats):
+# With active defense (enforces live Windows firewall blocks for flagged threats).
+# Refused with a loud warning (exit 2) unless the last audit verdict is PASS:
 python scripts/dashboard.py --port 8000 --active-defense
 ```
 Open `http://localhost:8000` in any web browser:

@@ -1,1227 +1,507 @@
 {
-  "timestamp": "2026-09-20T13:46:30.054175",
+  "timestamp": "2026-09-27T05:41:15.923951",
   "operating_point": 0.85,
   "monolith": {
-    "holdout_tpr": 0.9169,
+    "holdout_tpr": 0.6853,
     "holdout_fpr": 0.0,
-    "measured_evals_per_sec": 447.7,
+    "measured_evals_per_sec": 619.4,
     "history": [
       {
         "generation": 0,
-        "best_fitness": 0.4146,
-        "train_tpr": 0.3296,
-        "train_fpr": 0.0024,
+        "best_fitness": 0.2834,
+        "train_tpr": 0.7282,
+        "train_fpr": 0.0633,
         "nodes": 1,
         "connections": 20
       },
       {
         "generation": 1,
-        "best_fitness": 0.4496,
-        "train_tpr": 0.4544,
-        "train_fpr": 0.0074,
-        "nodes": 1,
-        "connections": 20
+        "best_fitness": 0.407,
+        "train_tpr": 0.3543,
+        "train_fpr": 0.0015,
+        "nodes": 2,
+        "connections": 22
       },
       {
         "generation": 2,
-        "best_fitness": 0.4605,
-        "train_tpr": 0.4422,
-        "train_fpr": 0.0061,
+        "best_fitness": 0.407,
+        "train_tpr": 0.3543,
+        "train_fpr": 0.0015,
         "nodes": 2,
         "connections": 22
       },
       {
         "generation": 3,
-        "best_fitness": 0.5391,
-        "train_tpr": 0.6743,
-        "train_fpr": 0.0148,
+        "best_fitness": 0.4513,
+        "train_tpr": 0.407,
+        "train_fpr": 0.0016,
         "nodes": 2,
-        "connections": 23
+        "connections": 21
       },
       {
         "generation": 4,
-        "best_fitness": 0.5656,
-        "train_tpr": 0.5807,
-        "train_fpr": 0.0071,
-        "nodes": 1,
-        "connections": 20
+        "best_fitness": 0.4513,
+        "train_tpr": 0.407,
+        "train_fpr": 0.0016,
+        "nodes": 2,
+        "connections": 21
       },
       {
         "generation": 5,
-        "best_fitness": 0.6014,
-        "train_tpr": 0.6545,
-        "train_fpr": 0.0091,
-        "nodes": 4,
-        "connections": 27
+        "best_fitness": 0.4932,
+        "train_tpr": 0.4321,
+        "train_fpr": 0.001,
+        "nodes": 2,
+        "connections": 20
       },
       {
         "generation": 6,
-        "best_fitness": 0.6014,
-        "train_tpr": 0.6545,
-        "train_fpr": 0.0091,
-        "nodes": 4,
-        "connections": 27
+        "best_fitness": 0.5142,
+        "train_tpr": 0.4907,
+        "train_fpr": 0.0017,
+        "nodes": 3,
+        "connections": 23
       },
       {
         "generation": 7,
-        "best_fitness": 0.6294,
-        "train_tpr": 0.7749,
-        "train_fpr": 0.0143,
+        "best_fitness": 0.5142,
+        "train_tpr": 0.4907,
+        "train_fpr": 0.0017,
         "nodes": 3,
         "connections": 23
       },
       {
         "generation": 8,
-        "best_fitness": 0.6294,
-        "train_tpr": 0.7749,
-        "train_fpr": 0.0143,
+        "best_fitness": 0.5142,
+        "train_tpr": 0.4907,
+        "train_fpr": 0.0017,
         "nodes": 3,
         "connections": 23
       },
       {
         "generation": 9,
-        "best_fitness": 0.6294,
-        "train_tpr": 0.7749,
-        "train_fpr": 0.0143,
-        "nodes": 3,
-        "connections": 23
+        "best_fitness": 0.5848,
+        "train_tpr": 0.5129,
+        "train_fpr": 0.0004,
+        "nodes": 1,
+        "connections": 20
       },
       {
         "generation": 10,
-        "best_fitness": 0.6294,
-        "train_tpr": 0.7749,
-        "train_fpr": 0.0143,
-        "nodes": 3,
-        "connections": 23
+        "best_fitness": 0.5848,
+        "train_tpr": 0.5129,
+        "train_fpr": 0.0004,
+        "nodes": 1,
+        "connections": 20
       },
       {
         "generation": 11,
-        "best_fitness": 0.6301,
-        "train_tpr": 0.6603,
-        "train_fpr": 0.0069,
-        "nodes": 2,
+        "best_fitness": 0.5848,
+        "train_tpr": 0.5129,
+        "train_fpr": 0.0004,
+        "nodes": 1,
         "connections": 20
       },
       {
         "generation": 12,
-        "best_fitness": 0.6301,
-        "train_tpr": 0.6603,
-        "train_fpr": 0.0069,
-        "nodes": 2,
-        "connections": 20
+        "best_fitness": 0.62,
+        "train_tpr": 0.7063,
+        "train_fpr": 0.0037,
+        "nodes": 4,
+        "connections": 25
       },
       {
         "generation": 13,
-        "best_fitness": 0.6618,
-        "train_tpr": 0.8026,
-        "train_fpr": 0.0132,
+        "best_fitness": 0.62,
+        "train_tpr": 0.7063,
+        "train_fpr": 0.0037,
         "nodes": 4,
         "connections": 25
       },
       {
         "generation": 14,
-        "best_fitness": 0.6802,
-        "train_tpr": 0.6721,
+        "best_fitness": 0.62,
+        "train_tpr": 0.7063,
         "train_fpr": 0.0037,
-        "nodes": 3,
-        "connections": 19
+        "nodes": 4,
+        "connections": 25
       },
       {
         "generation": 15,
-        "best_fitness": 0.6802,
-        "train_tpr": 0.6721,
+        "best_fitness": 0.62,
+        "train_tpr": 0.7063,
         "train_fpr": 0.0037,
-        "nodes": 3,
-        "connections": 19
+        "nodes": 4,
+        "connections": 25
       },
       {
         "generation": 16,
-        "best_fitness": 0.6802,
-        "train_tpr": 0.6721,
+        "best_fitness": 0.62,
+        "train_tpr": 0.7063,
         "train_fpr": 0.0037,
-        "nodes": 3,
-        "connections": 19
+        "nodes": 4,
+        "connections": 25
       },
       {
         "generation": 17,
-        "best_fitness": 0.6802,
-        "train_tpr": 0.6721,
+        "best_fitness": 0.62,
+        "train_tpr": 0.7063,
         "train_fpr": 0.0037,
-        "nodes": 3,
-        "connections": 19
+        "nodes": 4,
+        "connections": 25
       },
       {
         "generation": 18,
-        "best_fitness": 0.6802,
-        "train_tpr": 0.6721,
+        "best_fitness": 0.62,
+        "train_tpr": 0.7063,
         "train_fpr": 0.0037,
-        "nodes": 3,
-        "connections": 19
+        "nodes": 4,
+        "connections": 25
       },
       {
         "generation": 19,
-        "best_fitness": 0.6802,
-        "train_tpr": 0.6721,
+        "best_fitness": 0.62,
+        "train_tpr": 0.7063,
         "train_fpr": 0.0037,
-        "nodes": 3,
-        "connections": 19
+        "nodes": 4,
+        "connections": 25
       },
       {
         "generation": 20,
-        "best_fitness": 0.6802,
-        "train_tpr": 0.6721,
+        "best_fitness": 0.62,
+        "train_tpr": 0.7063,
         "train_fpr": 0.0037,
-        "nodes": 3,
-        "connections": 19
+        "nodes": 4,
+        "connections": 25
       },
       {
         "generation": 21,
-        "best_fitness": 0.6802,
-        "train_tpr": 0.6721,
+        "best_fitness": 0.62,
+        "train_tpr": 0.7063,
         "train_fpr": 0.0037,
-        "nodes": 3,
-        "connections": 19
+        "nodes": 4,
+        "connections": 25
       },
       {
         "generation": 22,
-        "best_fitness": 0.6802,
-        "train_tpr": 0.6721,
+        "best_fitness": 0.62,
+        "train_tpr": 0.7063,
         "train_fpr": 0.0037,
-        "nodes": 3,
-        "connections": 19
+        "nodes": 4,
+        "connections": 25
       },
       {
         "generation": 23,
-        "best_fitness": 0.6802,
-        "train_tpr": 0.6721,
+        "best_fitness": 0.62,
+        "train_tpr": 0.7063,
         "train_fpr": 0.0037,
-        "nodes": 3,
-        "connections": 19
+        "nodes": 4,
+        "connections": 25
       },
       {
         "generation": 24,
-        "best_fitness": 0.6802,
-        "train_tpr": 0.6721,
-        "train_fpr": 0.0037,
+        "best_fitness": 0.626,
+        "train_tpr": 0.6077,
+        "train_fpr": 0.0014,
         "nodes": 3,
-        "connections": 19
+        "connections": 23
       },
       {
         "generation": 25,
-        "best_fitness": 0.6802,
-        "train_tpr": 0.6721,
-        "train_fpr": 0.0037,
+        "best_fitness": 0.626,
+        "train_tpr": 0.6077,
+        "train_fpr": 0.0014,
         "nodes": 3,
-        "connections": 19
+        "connections": 23
       },
       {
         "generation": 26,
-        "best_fitness": 0.7073,
-        "train_tpr": 0.842,
-        "train_fpr": 0.0123,
+        "best_fitness": 0.626,
+        "train_tpr": 0.6077,
+        "train_fpr": 0.0014,
         "nodes": 3,
-        "connections": 20
+        "connections": 23
       },
       {
         "generation": 27,
-        "best_fitness": 0.7073,
-        "train_tpr": 0.842,
-        "train_fpr": 0.0123,
+        "best_fitness": 0.626,
+        "train_tpr": 0.6077,
+        "train_fpr": 0.0014,
         "nodes": 3,
-        "connections": 20
+        "connections": 23
       },
       {
         "generation": 28,
-        "best_fitness": 0.7168,
-        "train_tpr": 0.8625,
-        "train_fpr": 0.0123,
-        "nodes": 4,
-        "connections": 22
+        "best_fitness": 0.626,
+        "train_tpr": 0.6077,
+        "train_fpr": 0.0014,
+        "nodes": 3,
+        "connections": 23
       },
       {
         "generation": 29,
-        "best_fitness": 0.7238,
-        "train_tpr": 0.8606,
-        "train_fpr": 0.0123,
-        "nodes": 4,
-        "connections": 21
+        "best_fitness": 0.626,
+        "train_tpr": 0.6077,
+        "train_fpr": 0.0014,
+        "nodes": 3,
+        "connections": 23
       },
       {
         "generation": 30,
-        "best_fitness": 0.7238,
-        "train_tpr": 0.8606,
-        "train_fpr": 0.0123,
-        "nodes": 4,
-        "connections": 21
+        "best_fitness": 0.626,
+        "train_tpr": 0.6077,
+        "train_fpr": 0.0014,
+        "nodes": 3,
+        "connections": 23
       },
       {
         "generation": 31,
-        "best_fitness": 0.7375,
-        "train_tpr": 0.8961,
-        "train_fpr": 0.0125,
+        "best_fitness": 0.626,
+        "train_tpr": 0.6077,
+        "train_fpr": 0.0014,
         "nodes": 3,
-        "connections": 19
+        "connections": 23
       },
       {
         "generation": 32,
-        "best_fitness": 0.7375,
-        "train_tpr": 0.8961,
-        "train_fpr": 0.0125,
+        "best_fitness": 0.626,
+        "train_tpr": 0.6077,
+        "train_fpr": 0.0014,
         "nodes": 3,
-        "connections": 19
+        "connections": 23
       },
       {
         "generation": 33,
-        "best_fitness": 0.7375,
-        "train_tpr": 0.8961,
-        "train_fpr": 0.0125,
+        "best_fitness": 0.626,
+        "train_tpr": 0.6077,
+        "train_fpr": 0.0014,
         "nodes": 3,
-        "connections": 19
+        "connections": 23
       },
       {
         "generation": 34,
-        "best_fitness": 0.7375,
-        "train_tpr": 0.8961,
-        "train_fpr": 0.0125,
+        "best_fitness": 0.626,
+        "train_tpr": 0.6077,
+        "train_fpr": 0.0014,
         "nodes": 3,
-        "connections": 19
+        "connections": 23
       },
       {
         "generation": 35,
-        "best_fitness": 0.7491,
-        "train_tpr": 0.8961,
-        "train_fpr": 0.0125,
-        "nodes": 5,
-        "connections": 24
+        "best_fitness": 0.626,
+        "train_tpr": 0.6077,
+        "train_fpr": 0.0014,
+        "nodes": 3,
+        "connections": 23
       },
       {
         "generation": 36,
-        "best_fitness": 0.7491,
-        "train_tpr": 0.8961,
-        "train_fpr": 0.0125,
-        "nodes": 5,
-        "connections": 24
+        "best_fitness": 0.626,
+        "train_tpr": 0.6077,
+        "train_fpr": 0.0014,
+        "nodes": 3,
+        "connections": 23
       },
       {
         "generation": 37,
-        "best_fitness": 0.7491,
-        "train_tpr": 0.8961,
-        "train_fpr": 0.0125,
-        "nodes": 5,
-        "connections": 24
+        "best_fitness": 0.626,
+        "train_tpr": 0.6077,
+        "train_fpr": 0.0014,
+        "nodes": 3,
+        "connections": 23
       },
       {
         "generation": 38,
-        "best_fitness": 0.7491,
-        "train_tpr": 0.8961,
-        "train_fpr": 0.0125,
-        "nodes": 5,
-        "connections": 24
+        "best_fitness": 0.626,
+        "train_tpr": 0.6077,
+        "train_fpr": 0.0014,
+        "nodes": 3,
+        "connections": 23
       },
       {
         "generation": 39,
-        "best_fitness": 0.7491,
-        "train_tpr": 0.8961,
-        "train_fpr": 0.0125,
-        "nodes": 5,
-        "connections": 24
+        "best_fitness": 0.626,
+        "train_tpr": 0.6077,
+        "train_fpr": 0.0014,
+        "nodes": 3,
+        "connections": 23
       },
       {
         "generation": 40,
-        "best_fitness": 0.7491,
-        "train_tpr": 0.8961,
-        "train_fpr": 0.0125,
-        "nodes": 5,
-        "connections": 24
+        "best_fitness": 0.626,
+        "train_tpr": 0.6077,
+        "train_fpr": 0.0014,
+        "nodes": 3,
+        "connections": 23
       },
       {
         "generation": 41,
-        "best_fitness": 0.7491,
-        "train_tpr": 0.8961,
-        "train_fpr": 0.0125,
-        "nodes": 5,
-        "connections": 24
+        "best_fitness": 0.626,
+        "train_tpr": 0.6077,
+        "train_fpr": 0.0014,
+        "nodes": 3,
+        "connections": 23
       },
       {
         "generation": 42,
-        "best_fitness": 0.7491,
-        "train_tpr": 0.8961,
-        "train_fpr": 0.0125,
-        "nodes": 5,
-        "connections": 24
+        "best_fitness": 0.626,
+        "train_tpr": 0.6077,
+        "train_fpr": 0.0014,
+        "nodes": 3,
+        "connections": 23
       },
       {
         "generation": 43,
-        "best_fitness": 0.7491,
-        "train_tpr": 0.8961,
-        "train_fpr": 0.0125,
-        "nodes": 5,
-        "connections": 24
+        "best_fitness": 0.626,
+        "train_tpr": 0.6077,
+        "train_fpr": 0.0014,
+        "nodes": 3,
+        "connections": 23
       },
       {
         "generation": 44,
-        "best_fitness": 0.7491,
-        "train_tpr": 0.8961,
-        "train_fpr": 0.0125,
-        "nodes": 5,
-        "connections": 24
+        "best_fitness": 0.626,
+        "train_tpr": 0.6077,
+        "train_fpr": 0.0014,
+        "nodes": 3,
+        "connections": 23
       },
       {
         "generation": 45,
-        "best_fitness": 0.7491,
-        "train_tpr": 0.8961,
-        "train_fpr": 0.0125,
-        "nodes": 5,
-        "connections": 24
+        "best_fitness": 0.626,
+        "train_tpr": 0.6077,
+        "train_fpr": 0.0014,
+        "nodes": 3,
+        "connections": 23
       },
       {
         "generation": 46,
-        "best_fitness": 0.7491,
-        "train_tpr": 0.8961,
-        "train_fpr": 0.0125,
-        "nodes": 5,
-        "connections": 24
+        "best_fitness": 0.626,
+        "train_tpr": 0.6077,
+        "train_fpr": 0.0014,
+        "nodes": 3,
+        "connections": 23
       },
       {
         "generation": 47,
-        "best_fitness": 0.7491,
-        "train_tpr": 0.8961,
-        "train_fpr": 0.0125,
-        "nodes": 5,
-        "connections": 24
+        "best_fitness": 0.626,
+        "train_tpr": 0.6077,
+        "train_fpr": 0.0014,
+        "nodes": 3,
+        "connections": 23
       },
       {
         "generation": 48,
-        "best_fitness": 0.7491,
-        "train_tpr": 0.8961,
-        "train_fpr": 0.0125,
-        "nodes": 5,
-        "connections": 24
+        "best_fitness": 0.626,
+        "train_tpr": 0.6077,
+        "train_fpr": 0.0014,
+        "nodes": 3,
+        "connections": 23
       },
       {
         "generation": 49,
-        "best_fitness": 0.7491,
-        "train_tpr": 0.8961,
-        "train_fpr": 0.0125,
-        "nodes": 5,
-        "connections": 24
+        "best_fitness": 0.626,
+        "train_tpr": 0.6077,
+        "train_fpr": 0.0014,
+        "nodes": 3,
+        "connections": 23
       },
       {
         "generation": 50,
-        "best_fitness": 0.7491,
-        "train_tpr": 0.8961,
-        "train_fpr": 0.0125,
-        "nodes": 5,
-        "connections": 24
+        "best_fitness": 0.626,
+        "train_tpr": 0.6077,
+        "train_fpr": 0.0014,
+        "nodes": 3,
+        "connections": 23
       },
       {
         "generation": 51,
-        "best_fitness": 0.7494,
-        "train_tpr": 0.8961,
-        "train_fpr": 0.0125,
-        "nodes": 4,
-        "connections": 19
+        "best_fitness": 0.626,
+        "train_tpr": 0.6077,
+        "train_fpr": 0.0014,
+        "nodes": 3,
+        "connections": 23
       },
       {
         "generation": 52,
-        "best_fitness": 0.7494,
-        "train_tpr": 0.8961,
-        "train_fpr": 0.0125,
-        "nodes": 4,
-        "connections": 20
+        "best_fitness": 0.626,
+        "train_tpr": 0.6077,
+        "train_fpr": 0.0014,
+        "nodes": 3,
+        "connections": 23
       },
       {
         "generation": 53,
-        "best_fitness": 0.7494,
-        "train_tpr": 0.8961,
-        "train_fpr": 0.0125,
-        "nodes": 4,
-        "connections": 20
+        "best_fitness": 0.626,
+        "train_tpr": 0.6077,
+        "train_fpr": 0.0014,
+        "nodes": 3,
+        "connections": 23
       },
       {
         "generation": 54,
-        "best_fitness": 0.7494,
-        "train_tpr": 0.8961,
-        "train_fpr": 0.0125,
-        "nodes": 4,
-        "connections": 20
+        "best_fitness": 0.626,
+        "train_tpr": 0.6077,
+        "train_fpr": 0.0014,
+        "nodes": 3,
+        "connections": 23
       },
       {
         "generation": 55,
-        "best_fitness": 0.7494,
-        "train_tpr": 0.8961,
-        "train_fpr": 0.0125,
-        "nodes": 4,
-        "connections": 20
+        "best_fitness": 0.626,
+        "train_tpr": 0.6077,
+        "train_fpr": 0.0014,
+        "nodes": 3,
+        "connections": 23
       },
       {
         "generation": 56,
-        "best_fitness": 0.7494,
-        "train_tpr": 0.8961,
-        "train_fpr": 0.0125,
-        "nodes": 4,
-        "connections": 20
+        "best_fitness": 0.626,
+        "train_tpr": 0.6077,
+        "train_fpr": 0.0014,
+        "nodes": 3,
+        "connections": 23
       },
       {
         "generation": 57,
-        "best_fitness": 0.7494,
-        "train_tpr": 0.8961,
-        "train_fpr": 0.0125,
-        "nodes": 4,
-        "connections": 20
+        "best_fitness": 0.626,
+        "train_tpr": 0.6077,
+        "train_fpr": 0.0014,
+        "nodes": 3,
+        "connections": 23
       },
       {
         "generation": 58,
-        "best_fitness": 0.7494,
-        "train_tpr": 0.8961,
-        "train_fpr": 0.0125,
-        "nodes": 4,
-        "connections": 21
+        "best_fitness": 0.6611,
+        "train_tpr": 0.6861,
+        "train_fpr": 0.0022,
+        "nodes": 2,
+        "connections": 22
       },
       {
         "generation": 59,
-        "best_fitness": 0.7494,
-        "train_tpr": 0.8961,
-        "train_fpr": 0.0125,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 60,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 61,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 62,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 63,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 64,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 65,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 66,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 67,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 68,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 69,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 70,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 71,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 72,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 73,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 74,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 75,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 76,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 77,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 78,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 79,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 80,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 81,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 82,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 83,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 84,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 85,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 86,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 87,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 88,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 89,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 90,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 91,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 92,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 93,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 94,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 95,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 96,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 97,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 98,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 99,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 100,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 101,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 102,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 103,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 104,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 105,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 106,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 107,
-        "best_fitness": 0.7575,
-        "train_tpr": 0.9074,
-        "train_fpr": 0.0126,
-        "nodes": 3,
-        "connections": 19
-      },
-      {
-        "generation": 108,
-        "best_fitness": 0.7614,
-        "train_tpr": 0.9151,
-        "train_fpr": 0.0128,
-        "nodes": 3,
-        "connections": 20
-      },
-      {
-        "generation": 109,
-        "best_fitness": 0.7614,
-        "train_tpr": 0.9151,
-        "train_fpr": 0.0128,
-        "nodes": 3,
-        "connections": 20
-      },
-      {
-        "generation": 110,
-        "best_fitness": 0.7614,
-        "train_tpr": 0.9151,
-        "train_fpr": 0.0128,
-        "nodes": 3,
-        "connections": 20
-      },
-      {
-        "generation": 111,
-        "best_fitness": 0.7614,
-        "train_tpr": 0.9151,
-        "train_fpr": 0.0128,
-        "nodes": 3,
-        "connections": 20
-      },
-      {
-        "generation": 112,
-        "best_fitness": 0.7614,
-        "train_tpr": 0.9151,
-        "train_fpr": 0.0128,
-        "nodes": 3,
-        "connections": 20
-      },
-      {
-        "generation": 113,
-        "best_fitness": 0.7614,
-        "train_tpr": 0.9151,
-        "train_fpr": 0.0128,
-        "nodes": 3,
-        "connections": 20
-      },
-      {
-        "generation": 114,
-        "best_fitness": 0.7614,
-        "train_tpr": 0.9151,
-        "train_fpr": 0.0128,
-        "nodes": 3,
-        "connections": 20
-      },
-      {
-        "generation": 115,
-        "best_fitness": 0.7614,
-        "train_tpr": 0.9151,
-        "train_fpr": 0.0128,
-        "nodes": 3,
-        "connections": 20
-      },
-      {
-        "generation": 116,
-        "best_fitness": 0.7614,
-        "train_tpr": 0.9151,
-        "train_fpr": 0.0128,
-        "nodes": 3,
-        "connections": 20
-      },
-      {
-        "generation": 117,
-        "best_fitness": 0.7614,
-        "train_tpr": 0.9151,
-        "train_fpr": 0.0128,
-        "nodes": 3,
-        "connections": 20
-      },
-      {
-        "generation": 118,
-        "best_fitness": 0.7614,
-        "train_tpr": 0.9151,
-        "train_fpr": 0.0128,
-        "nodes": 3,
-        "connections": 20
-      },
-      {
-        "generation": 119,
-        "best_fitness": 0.7614,
-        "train_tpr": 0.9151,
-        "train_fpr": 0.0128,
-        "nodes": 3,
-        "connections": 20
-      },
-      {
-        "generation": 120,
-        "best_fitness": 0.7614,
-        "train_tpr": 0.9151,
-        "train_fpr": 0.0128,
-        "nodes": 3,
-        "connections": 20
-      },
-      {
-        "generation": 121,
-        "best_fitness": 0.7614,
-        "train_tpr": 0.9151,
-        "train_fpr": 0.0128,
-        "nodes": 3,
-        "connections": 20
-      },
-      {
-        "generation": 122,
-        "best_fitness": 0.7614,
-        "train_tpr": 0.9151,
-        "train_fpr": 0.0128,
-        "nodes": 3,
-        "connections": 20
-      },
-      {
-        "generation": 123,
-        "best_fitness": 0.7614,
-        "train_tpr": 0.9151,
-        "train_fpr": 0.0128,
-        "nodes": 3,
-        "connections": 20
-      },
-      {
-        "generation": 124,
-        "best_fitness": 0.7614,
-        "train_tpr": 0.9151,
-        "train_fpr": 0.0128,
-        "nodes": 3,
-        "connections": 20
-      },
-      {
-        "generation": 125,
-        "best_fitness": 0.7614,
-        "train_tpr": 0.9151,
-        "train_fpr": 0.0128,
-        "nodes": 3,
-        "connections": 20
-      },
-      {
-        "generation": 126,
-        "best_fitness": 0.7614,
-        "train_tpr": 0.9151,
-        "train_fpr": 0.0128,
-        "nodes": 3,
-        "connections": 20
-      },
-      {
-        "generation": 127,
-        "best_fitness": 0.7614,
-        "train_tpr": 0.9151,
-        "train_fpr": 0.0128,
-        "nodes": 3,
-        "connections": 20
-      },
-      {
-        "generation": 128,
-        "best_fitness": 0.7614,
-        "train_tpr": 0.9151,
-        "train_fpr": 0.0128,
-        "nodes": 3,
-        "connections": 20
-      },
-      {
-        "generation": 129,
-        "best_fitness": 0.7614,
-        "train_tpr": 0.9151,
-        "train_fpr": 0.0128,
-        "nodes": 3,
-        "connections": 20
-      },
-      {
-        "generation": 130,
-        "best_fitness": 0.7614,
-        "train_tpr": 0.9151,
-        "train_fpr": 0.0128,
-        "nodes": 3,
-        "connections": 20
-      },
-      {
-        "generation": 131,
-        "best_fitness": 0.762,
-        "train_tpr": 0.915,
-        "train_fpr": 0.0127,
-        "nodes": 4,
+        "best_fitness": 0.6611,
+        "train_tpr": 0.6861,
+        "train_fpr": 0.0022,
+        "nodes": 2,
         "connections": 22
-      },
-      {
-        "generation": 132,
-        "best_fitness": 0.762,
-        "train_tpr": 0.915,
-        "train_fpr": 0.0127,
-        "nodes": 4,
-        "connections": 22
-      },
-      {
-        "generation": 133,
-        "best_fitness": 0.762,
-        "train_tpr": 0.915,
-        "train_fpr": 0.0127,
-        "nodes": 4,
-        "connections": 22
-      },
-      {
-        "generation": 134,
-        "best_fitness": 0.762,
-        "train_tpr": 0.915,
-        "train_fpr": 0.0127,
-        "nodes": 4,
-        "connections": 22
-      },
-      {
-        "generation": 135,
-        "best_fitness": 0.762,
-        "train_tpr": 0.915,
-        "train_fpr": 0.0127,
-        "nodes": 4,
-        "connections": 22
-      },
-      {
-        "generation": 136,
-        "best_fitness": 0.762,
-        "train_tpr": 0.915,
-        "train_fpr": 0.0127,
-        "nodes": 4,
-        "connections": 22
-      },
-      {
-        "generation": 137,
-        "best_fitness": 0.762,
-        "train_tpr": 0.915,
-        "train_fpr": 0.0127,
-        "nodes": 4,
-        "connections": 22
-      },
-      {
-        "generation": 138,
-        "best_fitness": 0.762,
-        "train_tpr": 0.915,
-        "train_fpr": 0.0127,
-        "nodes": 4,
-        "connections": 22
-      },
-      {
-        "generation": 139,
-        "best_fitness": 0.7622,
-        "train_tpr": 0.9144,
-        "train_fpr": 0.0127,
-        "nodes": 4,
-        "connections": 19
-      },
-      {
-        "generation": 140,
-        "best_fitness": 0.7622,
-        "train_tpr": 0.9144,
-        "train_fpr": 0.0127,
-        "nodes": 4,
-        "connections": 19
-      },
-      {
-        "generation": 141,
-        "best_fitness": 0.7622,
-        "train_tpr": 0.9144,
-        "train_fpr": 0.0127,
-        "nodes": 4,
-        "connections": 19
-      },
-      {
-        "generation": 142,
-        "best_fitness": 0.7622,
-        "train_tpr": 0.9144,
-        "train_fpr": 0.0127,
-        "nodes": 4,
-        "connections": 19
-      },
-      {
-        "generation": 143,
-        "best_fitness": 0.7622,
-        "train_tpr": 0.9144,
-        "train_fpr": 0.0127,
-        "nodes": 4,
-        "connections": 19
-      },
-      {
-        "generation": 144,
-        "best_fitness": 0.7622,
-        "train_tpr": 0.9144,
-        "train_fpr": 0.0127,
-        "nodes": 4,
-        "connections": 19
-      },
-      {
-        "generation": 145,
-        "best_fitness": 0.7622,
-        "train_tpr": 0.9144,
-        "train_fpr": 0.0127,
-        "nodes": 4,
-        "connections": 19
-      },
-      {
-        "generation": 146,
-        "best_fitness": 0.7622,
-        "train_tpr": 0.9144,
-        "train_fpr": 0.0127,
-        "nodes": 4,
-        "connections": 19
-      },
-      {
-        "generation": 147,
-        "best_fitness": 0.7622,
-        "train_tpr": 0.9144,
-        "train_fpr": 0.0127,
-        "nodes": 4,
-        "connections": 19
-      },
-      {
-        "generation": 148,
-        "best_fitness": 0.7622,
-        "train_tpr": 0.9144,
-        "train_fpr": 0.0127,
-        "nodes": 4,
-        "connections": 19
-      },
-      {
-        "generation": 149,
-        "best_fitness": 0.7622,
-        "train_tpr": 0.9144,
-        "train_fpr": 0.0127,
-        "nodes": 4,
-        "connections": 19
       }
     ]
   },
   "specialists": {
     "volumetric": {
-      "holdout_tpr": 0.418,
-      "holdout_fpr": 0.0022,
-      "seated": true
+      "holdout_tpr": 0.7377,
+      "holdout_fpr": 0.0311,
+      "seated": false
     },
     "recon": {
-      "holdout_tpr": 0.8962,
+      "holdout_tpr": 0.4127,
       "holdout_fpr": 0.0,
       "seated": true
     },
     "payload": {
-      "holdout_tpr": 0.6316,
-      "holdout_fpr": 0.2081,
+      "holdout_tpr": 0.8753,
+      "holdout_fpr": 0.3336,
       "seated": false
     }
   },

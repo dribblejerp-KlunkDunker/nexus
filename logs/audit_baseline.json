@@ -1,7 +1,14 @@
 {
-  "recorded_utc": "2026-09-20T22:54:59.549512+00:00",
-  "champion_sha256": "fa08b91f7155818105791c9c2a7806fc3f15b6ee2f28ae25fb50fac2f591f1c3",
+  "recorded_utc": "2026-09-27T10:06:37.740360+00:00",
+  "champion_sha256": "1f5969f7902a8cc3fa868d311819b0da5dd324b1d2bd5b92c2c5d5c447f9ca8c",
   "captures": {
+    "background_20260927.pcap": {
+      "packets": 11559,
+      "scored": 5953,
+      "fpr_pct": 0.0,
+      "blocked_hosts": [],
+      "hours": 0.041645911931991575
+    },
     "home_live_baseline.pcap": {
       "packets": 2163,
       "scored": 1327,
@@ -12,7 +19,7 @@
     "continuous_baseline.pcap": {
       "packets": 19522,
       "scored": 10228,
-      "fpr_pct": 0.4399687133359405,
+      "fpr_pct": 0.35197497066875244,
       "blocked_hosts": [],
       "hours": 16.066430590815013
     }

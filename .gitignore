@@ -20,6 +20,9 @@ config/genome_key.hex
 # runtime event log (regenerated on every boot)
 logs/*.log
 
+# genome hot-reload signal (written on every promotion, read once at runtime)
+genomes/.reload_signal
+
 # tailwind freshness-check temp output
 web/static/css/app.css.check
 web/static/css/app.css.check.map

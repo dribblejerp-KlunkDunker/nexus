@@ -1,18 +1,18 @@
 {
-  "block_min_events": 10,
-  "block_window_sec": 60.0,
+  "block_min_events": 3,
+  "block_window_sec": 10.0,
   "alert_min_events": 1,
   "evidence_ttl_sec": 300.0,
   "max_tracked_sources": 8192,
   "_provenance": {
-    "calibrated": "2026-09-20T18:51:25.173806",
+    "calibrated": "2026-09-27T05:48:15.830631",
     "champion": "genomes/champion.pkl",
-    "champion_sha256": "fa08b91f7155818105791c9c2a7806fc3f15b6ee2f28ae25fb50fac2f591f1c3",
+    "champion_sha256": "1f5969f7902a8cc3fa868d311819b0da5dd324b1d2bd5b92c2c5d5c447f9ca8c",
     "scorer": "council",
     "operating_point": 0.85,
-    "benign_observation_hours": 16.08,
+    "benign_observation_hours": 16.12,
     "benign_blocks_per_24h": 0.0,
-    "high_volume_hosts_caught_pct": 71.4,
+    "high_volume_hosts_caught_pct": 72.2,
     "note": "Valid only for this champion. Re-run after every retrain."
   }
 }

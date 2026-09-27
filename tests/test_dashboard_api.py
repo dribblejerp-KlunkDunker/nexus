@@ -22,6 +22,7 @@ Two ground rules, learned from the machine states this suite must run on:
    honest floor.
 """
 
+import json
 import os
 import sys
 
@@ -380,3 +381,195 @@ def test_stream_generator_yields_keepalive_and_cleans_up():
     asyncio.run(scenario())
     assert dashboard.EVENT_SUBSCRIBERS == set(), \
         "SSE subscriber queue leaked after generator close"
+
+
+# ---------------------------------------------------------------------------
+# Audit-verified enforcement interlock. Arming live firewall blocking -- via
+# the --active-defense CLI flag or the dashboard's defense toggle -- must
+# refuse unless the most recent regression audit verdict is exactly PASS.
+# WARN / FAIL / missing / unreadable all refuse (fail closed). These tests
+# drive the real report path with a throwaway report file and always restore
+# the world; they never touch the live firewall layer.
+# ---------------------------------------------------------------------------
+
+def _write_report(path, verdict):
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump({"verdict": verdict, "checks": []}, f)
+
+
+def test_policy_interlock_read_only(tmp_path):
+    """policy.audit_verdict / enforcement_may_arm: PASS arms, everything else
+    refuses, and a missing or unreadable report is an unknown state that
+    refuses too."""
+    import policy
+
+    p = str(tmp_path / "report.json")
+    _write_report(p, "PASS")
+    assert policy.audit_verdict(p) == "PASS"
+    assert policy.enforcement_may_arm(p)[0] is True
+
+    for verdict in ("WARN", "FAIL"):
+        _write_report(p, verdict)
+        assert policy.audit_verdict(p) == verdict
+        allowed, reason = policy.enforcement_may_arm(p)
+        assert allowed is False
+        assert verdict in reason
+
+    _write_report(p, "PARTY")  # unknown verdict string = unknown state
+    assert policy.audit_verdict(p) is None
+    assert policy.enforcement_may_arm(p)[0] is False
+
+    missing = str(tmp_path / "never_audited.json")
+    assert policy.audit_verdict(missing) is None
+    allowed, reason = policy.enforcement_may_arm(missing)
+    assert allowed is False
+    assert "never audited" in reason or "missing" in reason
+
+    garbage = tmp_path / "garbage.json"
+    garbage.write_text("{not json", encoding="utf-8")
+    assert policy.audit_verdict(str(garbage)) is None
+    assert policy.enforcement_may_arm(str(garbage))[0] is False
+
+
+def test_policy_interlock_refuses_live_report_when_not_pass():
+    """Whatever the repo's real report currently says: if it is not PASS,
+    policy must refuse. (If the verdict ever becomes PASS this test still
+    passes -- it only pins the refusal logic, not the repo's health.)"""
+    import policy
+    allowed, reason = policy.enforcement_may_arm()
+    assert isinstance(allowed, bool) and reason
+    if policy.audit_verdict() != "PASS":
+        assert allowed is False
+
+
+def test_toggle_arms_when_audit_pass(client, tmp_path):
+    """With a PASS report installed, the toggle flips simulation -> live.
+    The report path is redirected to a throwaway file and the original
+    SHARED_STATE is restored, so no real state and no firewall layer moves."""
+    import dashboard
+
+    p = str(tmp_path / "pass.json")
+    _write_report(p, "PASS")
+    original_verdict, original_may = dashboard.audit_verdict, dashboard.enforcement_may_arm
+    original_state = dashboard.SHARED_STATE["active_defense"]
+    # Patch where dashboard uses the names (it imported them from policy).
+    dashboard.audit_verdict = lambda: "PASS"
+    dashboard.enforcement_may_arm = lambda: (True, "last audit verdict PASS")
+    try:
+        r = client.post("/api/defense/toggle")
+        assert r.status_code == 200
+        body = r.json()
+        assert body["active_defense"] is True
+        assert body["status"] == "ARMED (FIREWALL BLOCKS)"
+        assert dashboard.SHARED_STATE["active_defense"] is True
+    finally:
+        dashboard.audit_verdict = original_verdict
+        dashboard.enforcement_may_arm = original_may
+        dashboard.SHARED_STATE["active_defense"] = original_state
+
+
+def test_toggle_refuses_when_audit_warn(client):
+    """The regression test for the interlock: with the repo's real WARN report
+    in place, arming from the UI must be refused with 409 and the state must
+    stay simulation."""
+    import dashboard
+    import policy
+    original_state = dashboard.SHARED_STATE["active_defense"]
+    try:
+        # Force the state to simulation so the request is an ARM request.
+        dashboard.SHARED_STATE["active_defense"] = False
+        r = client.post("/api/defense/toggle")
+        if policy.audit_verdict() == "PASS":
+            pytest.skip("live report is PASS; the refusal path needs WARN/FAIL/missing")
+        assert r.status_code == 409, r.text
+        body = r.json()
+        assert "audit" in body["error"].lower()
+        assert body["active_defense"] is False
+        assert dashboard.SHARED_STATE["active_defense"] is False
+    finally:
+        dashboard.SHARED_STATE["active_defense"] = original_state
+
+
+def test_toggle_refuses_when_report_missing(client, tmp_path, monkeypatch):
+    """Fail closed: an absent report must 409, not fall through to arming."""
+    import dashboard
+    monkeypatch.setattr(dashboard, "audit_verdict", lambda: None)
+    monkeypatch.setattr(dashboard, "enforcement_may_arm",
+                        lambda: (False, "no audit verdict found"))
+    original_state = dashboard.SHARED_STATE["active_defense"]
+    try:
+        dashboard.SHARED_STATE["active_defense"] = False
+        r = client.post("/api/defense/toggle")
+        assert r.status_code == 409
+        assert r.json()["active_defense"] is False
+        assert dashboard.SHARED_STATE["active_defense"] is False
+    finally:
+        dashboard.SHARED_STATE["active_defense"] = original_state
+
+
+def test_toggle_disarm_is_always_allowed(client):
+    """The interlock gates arming only. Disarming must work whatever the
+    verdict is, so an operator can always stand the firewall down."""
+    import dashboard
+    original_state = dashboard.SHARED_STATE["active_defense"]
+    try:
+        dashboard.SHARED_STATE["active_defense"] = True
+        r = client.post("/api/defense/toggle")
+        assert r.status_code == 200
+        assert r.json()["active_defense"] is False
+        assert dashboard.SHARED_STATE["active_defense"] is False
+    finally:
+        dashboard.SHARED_STATE["active_defense"] = original_state
+
+
+def test_cli_run_dashboard_refuses_arming_without_pass(tmp_path):
+    """run_dashboard(active_defense=True) with a non-PASS report must come up
+    in simulation mode and report the refusal -- and the __main__ wrapper maps
+    that to exit code 2. uvicorn.run is stubbed so no server starts."""
+    import dashboard
+
+    p = str(tmp_path / "warn.json")
+    _write_report(p, "WARN")
+    original_verdict, original_may = dashboard.audit_verdict, dashboard.enforcement_may_arm
+    original_state = dashboard.SHARED_STATE["active_defense"]
+    dashboard.audit_verdict = lambda: "WARN"
+    dashboard.enforcement_may_arm = lambda: (False, "last audit verdict is WARN")
+
+    uvicorn_calls = []
+    original_uvicorn_run = dashboard.uvicorn.run
+    dashboard.uvicorn.run = lambda *a, **k: uvicorn_calls.append(a)
+    try:
+        armed = dashboard.run_dashboard(active_defense=True)
+        assert armed is False
+        assert dashboard.SHARED_STATE["active_defense"] is False
+        assert len(uvicorn_calls) == 1  # server still came up -- in simulation
+    finally:
+        dashboard.audit_verdict = original_verdict
+        dashboard.enforcement_may_arm = original_may
+        dashboard.uvicorn.run = original_uvicorn_run
+        dashboard.SHARED_STATE["active_defense"] = original_state
+
+
+def test_cli_run_dashboard_arms_with_pass(tmp_path):
+    """The complementary path: PASS report -> run_dashboard arms and reports
+    live enforcement (with uvicorn stubbed; the sniffer is not started)."""
+    import dashboard
+
+    p = str(tmp_path / "pass.json")
+    _write_report(p, "PASS")
+    original_verdict, original_may = dashboard.audit_verdict, dashboard.enforcement_may_arm
+    original_state = dashboard.SHARED_STATE["active_defense"]
+    dashboard.audit_verdict = lambda: "PASS"
+    dashboard.enforcement_may_arm = lambda: (True, "last audit verdict PASS")
+
+    original_uvicorn_run = dashboard.uvicorn.run
+    dashboard.uvicorn.run = lambda *a, **k: None
+    try:
+        armed = dashboard.run_dashboard(active_defense=True)
+        assert armed is True
+        assert dashboard.SHARED_STATE["active_defense"] is True
+    finally:
+        dashboard.audit_verdict = original_verdict
+        dashboard.enforcement_may_arm = original_may
+        dashboard.uvicorn.run = original_uvicorn_run
+        dashboard.SHARED_STATE["active_defense"] = original_state

@@ -1,25 +1,25 @@
 {
-  "generated": "2026-09-20T13:47:45.131697",
+  "generated": "2026-09-27T05:41:38.111516",
   "operating_point": 0.85,
   "holdout_gate_fpr": 0.005,
   "monolith": {
-    "holdout_tpr": 0.9169,
+    "holdout_tpr": 0.6853,
     "holdout_fpr": 0.0
   },
   "specialists": {
     "volumetric": {
-      "holdout_tpr": 0.418,
-      "holdout_fpr": 0.0022,
-      "seated": true
+      "holdout_tpr": 0.7377,
+      "holdout_fpr": 0.0311,
+      "seated": false
     },
     "recon": {
-      "holdout_tpr": 0.8962,
+      "holdout_tpr": 0.4127,
       "holdout_fpr": 0.0,
       "seated": true
     },
     "payload": {
-      "holdout_tpr": 0.6316,
-      "holdout_fpr": 0.2081,
+      "holdout_tpr": 0.8753,
+      "holdout_fpr": 0.3336,
       "seated": false
     }
   }

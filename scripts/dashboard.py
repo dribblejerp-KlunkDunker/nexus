@@ -46,7 +46,8 @@ from whitelist_manager import WhitelistManager
 from firewall import FirewallValidationError, block_ip as fw_block_ip, unblock_ip as fw_unblock_ip
 import genomevault
 import policy
-from policy import THREAT_THRESHOLD, is_threat
+from policy import (THREAT_THRESHOLD, is_threat,
+                    enforcement_may_arm, audit_verdict)
 import banstore
 
 # --------------------------------------------------------------------
@@ -1216,6 +1217,18 @@ async def toggle_defense():
         ops_control.assert_local(SHARED_STATE.get("bind_host", "127.0.0.1"))
     except ops_control.ControlError as e:
         return JSONResponse({"error": str(e)}, status_code=400)
+    # AUDIT-VERIFIED ENFORCEMENT INTERLOCK: arming (not disarming) requires the
+    # last regression audit to have ended PASS -- the same gate --active-defense
+    # goes through, so the CLI and the button cannot disagree.
+    if not SHARED_STATE["active_defense"]:
+        allowed, reason = enforcement_may_arm()
+        if not allowed:
+            return JSONResponse({
+                "error": reason,
+                "active_defense": False,
+                "audit_verdict": audit_verdict(),
+                "status": "ARMED (SIMULATION AUDIT)"
+            }, status_code=409)
     SHARED_STATE["active_defense"] = not SHARED_STATE["active_defense"]
     status_label = "ARMED (FIREWALL BLOCKS)" if SHARED_STATE["active_defense"] else "ARMED (SIMULATION AUDIT)"
     broadcast_event("defense_mode", {
@@ -1304,7 +1317,8 @@ async def simulate_attack(attack_type: str):
 # goes through ops_control.assert_local() using the host the server was actually
 # bound to. Bound anywhere but loopback, they refuse rather than degrade.
 # Nothing here can pass --active-defense: arming the firewall stays a deliberate
-# command-line act after a week of clean audits.
+# command-line act, gated by the audit-verified interlock in
+# policy.enforcement_may_arm().
 # ---------------------------------------------------------------------------
 
 class RollingRequest(BaseModel):
@@ -1408,6 +1422,24 @@ async def event_stream(request: Request):
 
 
 def run_dashboard(host: str = "127.0.0.1", port: int = 8000, sniff_live: bool = False, active_defense: bool = False, iface: Optional[str] = None):
+    # AUDIT-VERIFIED ENFORCEMENT INTERLOCK. Live firewall blocking is the one
+    # capability here that can drop a real host's packets, so it may only arm
+    # while the most recent regression audit ended PASS. WARN/FAIL/never-audited
+    # all refuse (fail closed) and the dashboard comes up in simulation mode
+    # instead; the CLI turns the refusal into a nonzero exit so launch scripts
+    # and operators see it. Nothing reachable from the web UI can bypass this:
+    # /api/defense/toggle enforces the same gate.
+    armed_requested = bool(active_defense)
+    if armed_requested:
+        allowed, reason = enforcement_may_arm()
+        if not allowed:
+            print("\n" + "=" * 65)
+            print("  NEXUS DEFENSE ARMING REFUSED (audit-verified interlock)")
+            print(f"  {reason}")
+            print("  Continuing in SIMULATION / AUDIT mode: bans stay in-memory,")
+            print("  no Windows Firewall rules are written.")
+            print("=" * 65 + "\n")
+            active_defense = False
     SHARED_STATE["active_defense"] = active_defense
     SHARED_STATE["bind_host"] = host
     if sniff_live:
@@ -1418,9 +1450,12 @@ def run_dashboard(host: str = "127.0.0.1", port: int = 8000, sniff_live: bool = 
     print(f"  URL:            http://localhost:{port}")
     print(f"  Live Sniffing:  {'ENABLED' if sniff_live else 'STANDBY (Toggle via Main HUD Switch)'}")
     print(f"  Defense Mode:   {'ARMED (LIVE FIREWALL)' if active_defense else 'SIMULATION / AUDIT'}")
+    if armed_requested:
+        print(f"  Interlock:      {'last audit PASS -- live enforcement armed' if active_defense else 'arming refused (see reason above)'}")
     print("=================================================================\n")
 
     uvicorn.run(app, host=host, port=port, log_level="warning")
+    return active_defense
 
 
 if __name__ == "__main__":
@@ -1432,10 +1467,14 @@ if __name__ == "__main__":
     parser.add_argument("--active-defense", action="store_true", help="Arm live Windows firewall blocking")
     args = parser.parse_args()
 
-    run_dashboard(
+    armed = run_dashboard(
         host=args.host,
         port=args.port,
         sniff_live=args.sniff,
         active_defense=args.active_defense,
         iface=args.iface
     )
+    if args.active_defense and not armed:
+        # The interlock refused arming (last audit not PASS). The dashboard ran
+        # in simulation mode; exit nonzero so scripts and operators notice.
+        sys.exit(2)

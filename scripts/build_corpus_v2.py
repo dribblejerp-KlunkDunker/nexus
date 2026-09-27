@@ -153,6 +153,16 @@ ATTACK_PROFILES = {
 }
 
 
+# Locally-administered placeholder MACs for every generated packet. Without
+# them scapy resolves the Ethernet source against this machine's default
+# interface at packet-construction time; on some hosts (e.g. a captured-only
+# NPF_Loopback default) that resolution raises and the corpus build dies.
+# Nothing in the 20-D feature space reads MACs, so the placeholders only make
+# the generator environment-independent.
+GEN_MAC = "02:de:ad:be:ef:01"
+LOC_MAC = "02:de:ad:be:ef:02"
+
+
 def _attacker_pool(base_dir: str) -> List[str]:
     """Real C2 addresses from the abuse.ch cache when present."""
     ti = os.path.join(base_dir, "data", "threat_intel_cache.json")
@@ -190,34 +200,34 @@ def build_attack_packet(kind: str, attackers: List[str], target: str, src_ip: st
     eph = lambda: random.randint(32768, 60999)
 
     if kind == "syn_flood":
-        return Ether()/IP(src=src, dst=target, ttl=ext_ttl)/TCP(
+        return Ether(src=GEN_MAC, dst=LOC_MAC)/IP(src=src, dst=target, ttl=ext_ttl)/TCP(
             sport=eph(), dport=random.choice([80, 443, 22, 3389, 445]),
             flags="S", window=random.choice([1024, 8192, 14600, 29200]),
             seq=random.randint(1000, 99999), ack=0)
 
     if kind == "stealth_scan":
-        return Ether()/IP(src=src, dst=target, ttl=ext_ttl)/TCP(
+        return Ether(src=GEN_MAC, dst=LOC_MAC)/IP(src=src, dst=target, ttl=ext_ttl)/TCP(
             sport=eph(), dport=random.randint(1, 1024),
             flags=random.choice(["FPU", 0, "F", "SF"]), window=random.choice([0, 1024]))
 
     if kind == "exploit":
-        return Ether()/IP(src=src, dst=target, ttl=ext_ttl)/TCP(
+        return Ether(src=GEN_MAC, dst=LOC_MAC)/IP(src=src, dst=target, ttl=ext_ttl)/TCP(
             sport=eph(), dport=random.choice([80, 8080, 445]),
             flags="PA", window=random.choice([1024, 14600, 64240]))/Raw(
             load=bytes(random.randint(0, 255) for _ in range(random.randint(128, 800))))
 
     if kind == "brute_force":
-        return Ether()/IP(src=src, dst=target, ttl=ext_ttl)/TCP(
+        return Ether(src=GEN_MAC, dst=LOC_MAC)/IP(src=src, dst=target, ttl=ext_ttl)/TCP(
             sport=eph(), dport=random.choice([22, 3389]),
             flags="S", window=14600)/Raw(load=b"SSH-2.0-OpenSSH_7.4\r\n")
 
     if kind == "rst_injection":
-        return Ether()/IP(src=src, dst=target, ttl=ext_ttl)/TCP(
+        return Ether(src=GEN_MAC, dst=LOC_MAC)/IP(src=src, dst=target, ttl=ext_ttl)/TCP(
             sport=eph(), dport=random.choice([80, 443]),
             flags="R", seq=99999999, window=0)
 
     if kind == "c2_beacon":
-        return Ether()/IP(src=src, dst=target, ttl=ext_ttl)/TCP(
+        return Ether(src=GEN_MAC, dst=LOC_MAC)/IP(src=src, dst=target, ttl=ext_ttl)/TCP(
             sport=eph(), dport=random.choice([8443, 8000, 4444, 8888, 9001]),
             flags="PA", window=random.choice([1024, 2048, 4096, 64240]))/Raw(
             load=bytes(random.randint(0, 255) for _ in range(random.randint(48, 128))))
@@ -227,7 +237,7 @@ def build_attack_packet(kind: str, attackers: List[str], target: str, src_ip: st
     # never evaluated in production. They now use the capture's real local
     # subnet and are excluded from the src-IP whitelist check at scoring time.
     if kind == "exfiltration":
-        return Ether()/IP(src=target, dst=random.choice(attackers), ttl=64)/TCP(
+        return Ether(src=GEN_MAC, dst=LOC_MAC)/IP(src=target, dst=random.choice(attackers), ttl=64)/TCP(
             sport=eph(), dport=random.choice([443, 8080, 14432, 2083]),
             flags="PA", window=64240)/Raw(
             load=bytes(random.randint(0, 255) for _ in range(random.randint(1300, 1460))))
@@ -238,12 +248,12 @@ def build_attack_packet(kind: str, attackers: List[str], target: str, src_ip: st
             b'{"id":2,"jsonrpc":"2.0","method":"mining.subscribe","params":["XMRig/6.18.0",null]}\n',
             b'{"id":3,"jsonrpc":"2.0","method":"mining.authorize","params":["wallet.worker1","x"]}\n',
         ]
-        return Ether()/IP(src=target, dst=random.choice(attackers), ttl=64)/TCP(
+        return Ether(src=GEN_MAC, dst=LOC_MAC)/IP(src=target, dst=random.choice(attackers), ttl=64)/TCP(
             sport=eph(), dport=random.choice([3333, 4444, 5555, 7777]),
             flags="PA", window=29200)/Raw(load=random.choice(stratum))
 
     if kind == "worm_lateral":
-        return Ether()/IP(src=src, dst=target, ttl=ext_ttl)/TCP(
+        return Ether(src=GEN_MAC, dst=LOC_MAC)/IP(src=src, dst=target, ttl=ext_ttl)/TCP(
             sport=eph(), dport=random.choice([445, 3389, 139]),
             flags="S", window=random.choice([8192, 16384, 64240]), seq=random.randint(100, 50000))
 
@@ -253,7 +263,7 @@ def build_attack_packet(kind: str, attackers: List[str], target: str, src_ip: st
         b"This program cannot be run in DOS mode.",
         b"\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x3e\x00",
     ])
-    return Ether()/IP(src=src, dst=target, ttl=ext_ttl)/TCP(
+    return Ether(src=GEN_MAC, dst=LOC_MAC)/IP(src=src, dst=target, ttl=ext_ttl)/TCP(
         sport=random.choice([80, 8080, 8000]), dport=eph(),
         flags="PA", window=65535)/Raw(
         load=magic + bytes(random.randint(0, 255) for _ in range(random.randint(500, 1200))))

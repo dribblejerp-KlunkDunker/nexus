@@ -29,8 +29,10 @@ Self-test:
 
 from __future__ import annotations
 
+import json
 import os
 import sys
+from typing import Optional, Tuple
 
 # --------------------------------------------------------------------------
 # The operating point
@@ -106,6 +108,64 @@ LOOPBACK_IPS = frozenset({"127.0.0.1", "::1", "0.0.0.0"})
 # its held-out benign false-positive rate is at most 0.5%.
 HOLDOUT_FPR_GATE = 0.005
 
+# --------------------------------------------------------------------------
+# Audit-verified enforcement interlock
+# --------------------------------------------------------------------------
+# Live firewall blocking is the one action in this platform that can drop
+# packets from a real host, so it may only be armed while the most recent
+# regression audit (ops.py audit -> ops_audit.py -> logs/audit_report.json)
+# ended PASS. WARN means the measured evidence has a hole (narrow capture
+# baseline, stale calibration) and blocking stays in simulation mode until a
+# clean run; FAIL means a benign host would be firewalled. A missing or
+# unreadable report is an unknown safety state and is refused too: the
+# interlock fails closed.
+AUDIT_REPORT_PATH = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+    "logs", "audit_report.json")
+
+
+def audit_verdict(report_path: str = None) -> Optional[str]:
+    """The verdict of the most recent regression audit, or None.
+
+    None means never audited (or the report is unreadable / carries an
+    unknown verdict string) -- an unknown safety state, which the arming
+    interlock treats exactly like a failure.
+    """
+    path = report_path or AUDIT_REPORT_PATH
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            verdict = json.load(f).get("verdict")
+    except Exception:
+        return None
+    return verdict if verdict in ("PASS", "WARN", "FAIL") else None
+
+
+def enforcement_may_arm(report_path: str = None) -> Tuple[bool, str]:
+    """(allowed, reason) for arming live firewall enforcement right now.
+
+    Reads the same report ops_audit.py writes; PASS is the only verdict that
+    permits arming. The reason string is operator-facing in both the CLI
+    refusal and the /api/defense/toggle 409.
+    """
+    verdict = audit_verdict(report_path)
+    if verdict is None:
+        return False, (
+            "no audit verdict found (logs/audit_report.json is missing or "
+            "unreadable). Run 'python scripts/ops.py audit' first -- blocking "
+            "never arms on an unknown safety state.")
+    if verdict == "PASS":
+        return True, "last audit verdict PASS"
+    if verdict == "WARN":
+        return False, (
+            "last audit verdict is WARN -- the measured evidence has a hole "
+            "and blocking stays in simulation mode. Run "
+            "'python scripts/ops.py audit' after fixing the warning checks "
+            "in logs/audit_report.json.")
+    return False, (
+        f"last audit verdict is {verdict} -- a benign host would be "
+        f"firewalled. Resolve the failing checks in logs/audit_report.json "
+        f"and re-run 'python scripts/ops.py audit'.")
+
 
 # --------------------------------------------------------------------------
 # Helpers
@@ -168,6 +228,25 @@ def _selftest() -> int:
 
     check("holdout gate below operating point sanity",
           0.0 < HOLDOUT_FPR_GATE <= 0.05)
+
+    # Interlock mechanics against throwaway reports, never the live one.
+    import tempfile
+    tmpdir = tempfile.mkdtemp(prefix="nexus_policy_selftest_")
+    for verdict, expected in (("PASS", True), ("WARN", False), ("FAIL", False)):
+        p = os.path.join(tmpdir, f"report_{verdict}.json")
+        with open(p, "w", encoding="utf-8") as f:
+            json.dump({"verdict": verdict}, f)
+        allowed, _ = enforcement_may_arm(p)
+        check(f"interlock verdict {verdict} -> {'arm' if expected else 'refuse'}",
+              allowed is expected)
+    missing = os.path.join(tmpdir, "absent.json")
+    check("interlock missing report -> refuse (fail closed)",
+          enforcement_may_arm(missing)[0] is False)
+    p = os.path.join(tmpdir, "report_garbage.json")
+    with open(p, "w", encoding="utf-8") as f:
+        f.write("{not json")
+    check("interlock unreadable report -> refuse (fail closed)",
+          enforcement_may_arm(p)[0] is False)
 
     # Env override mechanics (tested through _load_threshold, which reads the
     # environment at call time -- no module reload gymnastics needed).

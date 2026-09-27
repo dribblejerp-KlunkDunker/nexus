@@ -16,8 +16,8 @@ tasks. That is a real capability, so it is fenced:
     The only caller-supplied value is the capture tag, which is whitelisted
     against KNOWN_TAGS and re-checked against a strict character class.
   * No blocking mode from here. Nothing in this module can pass
-    --active-defense. Arming the firewall stays a deliberate command-line act
-    after a week of clean audits.
+    --active-defense. Arming the firewall stays a deliberate command-line act,
+    gated by the audit-verified interlock (policy.enforcement_may_arm).
 """
 
 import json
