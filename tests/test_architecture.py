@@ -157,3 +157,24 @@ def test_dashboard_routes_requests_through_webguard():
         src = f.read()
     assert "_wg_check_request(" in src, "middleware must delegate to webguard.check_request"
     assert "LOOPBACK_NAMES = {" not in src, "loopback set duplicated in dashboard (owner: webguard)"
+
+
+def test_dashboard_imports_and_boots():
+    """The product's entry point must import cleanly.
+
+    This file is the entire product surface -- the HUD, the API, the decision
+    engine -- yet it is only grep-checked elsewhere in this suite. A module-
+    level NameError (e.g. an import sitting below its first use) is a total
+    launch failure that source-grep tests cannot see, so we import it here.
+    """
+    import importlib.util
+    path = os.path.join(SCRIPTS, "dashboard.py")
+    spec = importlib.util.spec_from_file_location("dashboard_audit", path)
+    mod = importlib.util.module_from_spec(spec)
+    try:
+        spec.loader.exec_module(mod)
+    except Exception as e:  # pragma: no cover - failure path
+        pytest.fail(f"dashboard.py failed to import: {e!r}")
+    assert mod.app is not None, "FastAPI app object missing"
+    routes = {getattr(r, "path", None) for r in mod.app.routes}
+    assert "/api/status" in routes and "/api/stream" in routes

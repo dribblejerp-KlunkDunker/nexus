@@ -98,7 +98,17 @@ class CouncilArbiter:
 
     def load_models(self):
         """Loads all specialist champion models or falls back to monolithic model."""
-        import neat
+        # Missing models degrade one rung (HEURISTIC_ONLY); a missing library
+        # must degrade the same way, not take the whole dashboard down at
+        # import time. The heuristic path in evaluate() below is the bottom rung.
+        try:
+            import neat
+        except ImportError:
+            print("[Council Arbiter] neat-python not installed -- HEURISTIC_ONLY mode. "
+                  "Run SETUP.bat to build the full venv.")
+            self.active_mode = "HEURISTIC_ONLY"
+            self.last_load_time = time.time()
+            return
         loaded_count = 0
         self.specialists.clear()
         self.specialist_configs.clear()

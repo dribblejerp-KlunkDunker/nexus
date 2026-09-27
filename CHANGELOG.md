@@ -6,6 +6,69 @@ version scheme yet, so everything below is "Unreleased" until the first tag.
 
 ## [Unreleased]
 
+### Added
+
+- **`tests/test_dashboard_api.py`** (41 tests): endpoint-level smoke coverage
+  of the dashboard API -- every route the HUD calls, exercised through
+  FastAPI's TestClient with the intel layer stubbed offline (zero network).
+  Pins the response shapes the UI depends on, all 12 attack-simulation
+  routes (including the honest `whitelisted` answer for outbound sims), the
+  xmasscan decision path through to the in-memory ban store, whitelist
+  mutation with byte-exact restore, the unban round-trip, the loopback
+  Host fence (403 on spoofed Origin, security headers on every response),
+  and the SSE generator's disconnect cleanup. CI now installs
+  `fastapi httpx uvicorn scapy` so the real API surface is under test;
+  heavier deps stay out and the HEURISTIC_ONLY degradation is the pinned
+  honest floor.
+
+### Fixed (full-project audit, live-fire verified)
+
+- **`scripts/dashboard.py` crashed at import** (`NameError: banstore`): its
+  security-module imports sat ~40 lines below first use at module scope. The
+  product's entire entry point failed to launch and no test imported it. Fixed
+  by moving the import block to the top and adding
+  `test_dashboard_imports_and_boots`, which imports the module and asserts the
+  FastAPI routes exist, so a launch regression can never hide again.
+- **Missing `neat-python` took the whole dashboard down**: the degradation
+  ladder (COUNCIL → MONOLITHIC_FALLBACK → HEURISTIC_ONLY) handled missing
+  model files but a missing *library* was a bare module-level `import neat`.
+  Now degrades to HEURISTIC_ONLY with a pointer to SETUP.bat, like any other
+  missing input.
+- **Outbound attack simulations 500'd**: the default whitelist trusts all
+  RFC1918 sources (correct -- it stops the platform banning your own machine),
+  so sims sourced from 192.168.1.50 were silently skipped and `simulate_attack`
+  crashed on the `None` return. The endpoint now reports
+  `{status: "whitelisted", reason: ...}` honestly.
+- **`scripts/build_corpus_v2.py` NameError** (`base_dir` used undefined in
+  `main()`): broke the weekly cycle's corpus step on every machine. The weekly
+  cycle now runs corpus → training → holdout gates → promotion end to end.
+- **Corrupt self-hosted font**: `tDbV2o-...D7OwE.woff2` (JetBrains Mono basic
+  latin, referenced at 4 weights) failed OTS parsing; replaced with the
+  canonical copy. HUD mono text actually renders in JetBrains Mono now.
+- **`M 50 NaN` SVG path spam**: honest training histories store `null` fitness
+  for unmeasured generations; three renderers fed the nulls into path math.
+  All fitness values are clamped before plotting now.
+- **Fabricated LSTM accuracy removed**: Deck 2 claimed "SEQUENCE ACCURACY:
+  100.0% (Validation Pass)" in markup while the backend payload says
+  `sequence_accuracy: null -- not measured`. Now renders NOT MEASURED until a
+  real number exists.
+- **Surgeon log `undefined` spam**: renderer assumed every intervention had
+  sensor/weight fields; bias recalibrations and intermediary-node grafts have
+  different shapes. Renders per action type now.
+- **Evolve button could strand as "EVOLVING..."**: label only reset via a
+  success broadcast; a failed burst froze it, and nothing stopped double-click
+  bursts. Backend now broadcasts failures, the guard is re-entrancy safe, and
+  `null` fitness is handled.
+- **`ops_audit` died without onnxruntime**: the predictive-escalation audit
+  needs two constants from `sniff_and_respond`, whose module-level
+  `import onnxruntime` broke the import on machines without the ML runtime.
+  Import is now lazy at the single use site.
+- **`web/js/app.js` XSS sink**: continuous audit log rows were built with
+  `innerHTML` from server log strings (which can embed exception text).
+  Rebuilt with `textContent`.
+- **Stray build artifact**: `web/app.css.check` (a stale Tailwind
+  freshness-probe output) was tracked in git; untracked and ignored now.
+
 ### Security
 
 - **`scripts/firewall.py`** (new): validated firewall layer. Packet-derived IPs

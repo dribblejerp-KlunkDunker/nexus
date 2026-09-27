@@ -38,6 +38,16 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from feature_extractor import PacketFeatureExtractor, FEATURE_NAMES_20, calculate_shannon_entropy
 from passive_flow_tracker import PassiveTcpFlowTracker
 import ops_control
+# Core security-module imports. These MUST sit above the first use of
+# policy/banstore/genomevault (~line 147): a late import here produced a
+# NameError at module level, which is a total launch failure no source-grep
+# test could see (caught by the dashboard import smoke test instead).
+from whitelist_manager import WhitelistManager
+from firewall import FirewallValidationError, block_ip as fw_block_ip, unblock_ip as fw_unblock_ip
+import genomevault
+import policy
+from policy import THREAT_THRESHOLD, is_threat
+import banstore
 
 # --------------------------------------------------------------------
 # LIFESPAN & APPLICATION SETUP
@@ -183,12 +193,6 @@ SHARED_STATE["last_council_breakdown"] = {
 
 EXTRACTOR = PacketFeatureExtractor()
 TRACKER = PassiveTcpFlowTracker(timeout_seconds=120.0, history_size=8)
-from whitelist_manager import WhitelistManager
-from firewall import FirewallValidationError, block_ip as fw_block_ip, unblock_ip as fw_unblock_ip
-import genomevault
-import policy
-from policy import THREAT_THRESHOLD, is_threat
-import banstore
 WHITELIST_MGR = WhitelistManager("config/whitelist.json")
 
 # --------------------------------------------------------------------
@@ -1088,7 +1092,15 @@ async def trigger_evolution_burst():
             })
             print(f"[NEXUS Evolution] Burst complete! New Champion Fitness: {champ.fitness:.4f}")
         except Exception as e:
+            # Always broadcast: the evolve button's release depends on this
+            # event, and the operator deserves the failure reason, not a
+            # frozen "EVOLVING..." label.
             print(f"[NEXUS Evolution Error]: {e}")
+            broadcast_event("evolution_update", {
+                "message": f"Evolution burst failed: {e}",
+                "fitness": None,
+                "failed": True
+            })
 
     threading.Thread(target=_run_evolution, daemon=True).start()
     return {"status": "started", "generations": 5}
@@ -1271,6 +1283,17 @@ async def simulate_attack(attack_type: str):
               Raw(load=b"GET / HTTP/1.1\r\nHost: www.google.com\r\nUser-Agent: Mozilla/5.0\r\n\r\n")
 
     data = process_packet(pkt)
+    if data is None:
+        # Whitelisted sources (all RFC1918, loopback, link-local) are
+        # deliberately not evaluated -- that is what stops the platform from
+        # ever scoring or banning the operator's own machine. Report the
+        # bypass honestly instead of crashing on the None return.
+        is_wl, reason = WHITELIST_MGR.is_whitelisted(
+            pkt[IP].src, dst_ip=pkt[IP].dst,
+            sport=int(pkt[TCP].sport), dport=int(pkt[TCP].dport))
+        return {"status": "whitelisted" if is_wl else "bypassed",
+                "reason": reason or "not evaluated",
+                "src": pkt[IP].src, "score": None, "intel": None}
     return {"status": "ok", "score": data["score"], "src": data["src"], "intel": data["intel"]}
 
 

@@ -23,3 +23,7 @@ logs/*.log
 # tailwind freshness-check temp output
 web/static/css/app.css.check
 web/static/css/app.css.check.map
+
+# Tailwind freshness-check build artifacts
+web/*.css.check
+web/static/css/*.css.check

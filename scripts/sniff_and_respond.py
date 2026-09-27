@@ -24,7 +24,6 @@ from datetime import datetime
 from typing import Dict, Set, Optional
 import numpy as np
 import neat
-import onnxruntime as ort
 from scapy.all import sniff, send, IP, TCP, UDP, Raw, Ether, conf
 
 # Add scripts directory to path
@@ -175,6 +174,11 @@ class NexusGuardian:
         self.predictive_positives = 0
         if self.use_predictive and os.path.exists(self.predictive_model_path):
             try:
+                # onnxruntime is only needed for this one session; importing it
+                # lazily keeps audits and controller imports working on
+                # machines without the (large) ML runtime, at the cost of the
+                # predictive horizon reporting honestly unavailable.
+                import onnxruntime as ort
                 self.predictive_session = ort.InferenceSession(self.predictive_model_path)
                 try:
                     with open("logs/predictive_results.json", "r", encoding="utf-8") as f:

@@ -148,13 +148,18 @@ async function unbanIp(ip) {
     }
 
     // Trigger Evolution Burst
+let isEvolving = false;
 async function triggerEvolutionBurst() {
+      if (isEvolving) return; // re-entrancy guard: one burst at a time
+      isEvolving = true;
       const btnLabel = document.getElementById('evolve-btn-label');
       btnLabel.innerText = "EVOLVING POPULATION...";
       try {
         await fetch("/api/training/evolve", { method: "POST" });
       } catch (e) {
         console.error("Evolution trigger error:", e);
+        btnLabel.innerText = "EVOLVE 5 GENERATIONS";
+        isEvolving = false;
       }
     }
 
@@ -778,8 +783,12 @@ function renderContinuousEvolutionChart() {
 
       continuousFitnessHistory.forEach((pt, i) => {
         const x = n === 1 ? minX : minX + (i / (n - 1)) * (maxX - minX);
-        const yBest = minY - (pt.best_fitness * (minY - maxY));
-        const yAvg = minY - (pt.avg_fitness * (minY - maxY));
+        // SSE fields can arrive null/undefined on transient backend states;
+        // clamp to the baseline instead of emitting `M 50 NaN` path spam.
+        const bf = Number.isFinite(Number(pt.best_fitness)) ? Number(pt.best_fitness) : 0;
+        const af = Number.isFinite(Number(pt.avg_fitness)) ? Number(pt.avg_fitness) : 0;
+        const yBest = minY - (bf * (minY - maxY));
+        const yAvg = minY - (af * (minY - maxY));
 
         if (i === 0) {
           bestPath = `M ${x} ${yBest}`;
@@ -801,7 +810,8 @@ function renderContinuousEvolutionChart() {
 
       const latest = continuousFitnessHistory[continuousFitnessHistory.length - 1];
       if (latest) {
-        document.getElementById('cont-chart-latest').innerText = `Cycle #${latest.cycle} Gen ${latest.generation} (Best: ${latest.best_fitness.toFixed(4)})`;
+        const bestTxt = typeof latest.best_fitness === 'number' ? latest.best_fitness.toFixed(4) : '--';
+        document.getElementById('cont-chart-latest').innerText = `Cycle #${latest.cycle} Gen ${latest.generation} (Best: ${bestTxt})`;
         document.getElementById('cont-evolve-counter').innerText = `${continuousFitnessHistory.length} Generations Evolved`;
       }
     }
@@ -855,14 +865,22 @@ function addContinuousAuditLog(log) {
       };
 
       const color = stageColors[log.stage] || "text-slate-300";
-      const div = document.createElement('div');
-      div.className = "flex items-baseline gap-2";
-      div.innerHTML = `
-        <span class="text-textMuted">[${log.time}]</span>
-        <span class="${color}">[${log.stage}]</span>
-        <span class="text-slate-200">${log.message}</span>
-      `;
-      consoleEl.appendChild(div);
+      // Built with textContent, not innerHTML: log messages can embed
+      // exception text (e.g. IntelError details), which must never be
+      // interpreted as markup inside the HUD.
+      const row = document.createElement('div');
+      row.className = "flex items-baseline gap-2";
+      const ts = document.createElement('span');
+      ts.className = "text-textMuted";
+      ts.textContent = `[${log.time}]`;
+      const st = document.createElement('span');
+      st.className = color;
+      st.textContent = `[${log.stage}]`;
+      const msg = document.createElement('span');
+      msg.className = "text-slate-200";
+      msg.textContent = ` ${log.message}`;
+      row.append(ts, st, msg);
+      consoleEl.appendChild(row);
       consoleEl.scrollTop = consoleEl.scrollHeight;
     }
 
@@ -1039,13 +1057,17 @@ async function initHUD() {
             continuousFitnessHistory.push(msg.data);
             renderContinuousEvolutionChart();
           } else if (msg.type === "continuous_promote") {
-            document.getElementById('champ-fitness').innerText = msg.data.fitness.toFixed(4);
-            document.getElementById('cont-champ-fit').innerText = msg.data.fitness.toFixed(4);
+            if (typeof msg.data.fitness === 'number') {
+              document.getElementById('champ-fitness').innerText = msg.data.fitness.toFixed(4);
+              document.getElementById('cont-champ-fit').innerText = msg.data.fitness.toFixed(4);
+            }
             playTacticalChirp(1046, 'sine', 0.4);
           } else if (msg.type === "continuous_log") {
             addContinuousAuditLog(msg.data);
           } else if (msg.type === "evolution_update") {
-            document.getElementById('champ-fitness').innerText = msg.data.fitness.toFixed(4);
+            if (typeof msg.data.fitness === 'number') {
+              document.getElementById('champ-fitness').innerText = msg.data.fitness.toFixed(4);
+            }
             const _evoLog = document.getElementById('evolution-log');
             _evoLog.replaceChildren();
             const _evoTag = document.createElement('span');
@@ -1055,6 +1077,7 @@ async function initHUD() {
             _evoMsg.textContent = ' ' + String(msg.data.message);
             _evoLog.append(_evoTag, _evoMsg);
             document.getElementById('evolve-btn-label').innerText = "EVOLVE 5 GENERATIONS";
+            isEvolving = false; // success or failure broadcast both release the button
             updateTrainingStats();
             playTacticalChirp(880, 'sine', 0.3);
           } else if (msg.type === "adversary_benchmark") {
@@ -1102,8 +1125,12 @@ function renderFitnessChart(history) {
 
       history.forEach((pt, i) => {
         const x = n === 1 ? minX : minX + (i / (n - 1)) * (maxX - minX);
-        const yBest = minY - (pt.best_fitness * (minY - maxY));
-        const yAvg = minY - (pt.avg_fitness * (minY - maxY));
+        // Honest training logs store null fitness for unmeasured generations;
+        // clamp to baseline rather than emit `M 50 NaN` path spam.
+        const bf = Number.isFinite(Number(pt.best_fitness)) ? Number(pt.best_fitness) : 0;
+        const af = Number.isFinite(Number(pt.avg_fitness)) ? Number(pt.avg_fitness) : 0;
+        const yBest = minY - (bf * (minY - maxY));
+        const yAvg = minY - (af * (minY - maxY));
 
         if (i === 0) {
           bestPath = `M ${x} ${yBest}`;
@@ -1227,8 +1254,19 @@ async function updateSurgeonStatus() {
                   const _tag = document.createElement('span');
                   _tag.className = 'text-amber-400 font-bold';
                   _tag.textContent = `[${ts}] ⚡ ${op.action}`;
+                  // Render per-action, not per-shape: a bias recalibration
+                  // has no sensor/weight fields, a graft has no bias fields.
                   const _detail = document.createElement('span');
-                  _detail.textContent = `: ${op.sensor_name || op.sensor_node} → Node ${op.target_node} (w=${op.weight ? op.weight.toFixed(2) : ''})`;
+                  if (op.action === 'RECALIBRATED_OUTPUT_BIAS') {
+                    const ob = (typeof op.old_bias === 'number') ? op.old_bias.toFixed(2) : '--';
+                    const nb = (typeof op.new_bias === 'number') ? op.new_bias.toFixed(2) : '--';
+                    _detail.textContent = `: output bias ${ob} → ${nb}`;
+                  } else if (op.action === 'GRAFTED_INTERMEDIARY_NODE') {
+                    _detail.textContent = `: node #${op.node_id} (${op.activation || 'relu'}) from sensor ${op.sensor_source}`;
+                  } else {
+                    const w = (typeof op.weight === 'number') ? op.weight.toFixed(2) : '--';
+                    _detail.textContent = `: ${op.sensor_name || op.sensor_node} → Node ${op.target_node} (w=${w})`;
+                  }
                   _op.append(_tag, _detail);
                   consoleEl.append(_op);
                 });

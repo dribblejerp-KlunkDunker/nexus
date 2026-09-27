@@ -411,7 +411,7 @@ def main():
     from collections import Counter
     from scapy.all import rdpcap, IP, TCP
     ports, hosts, total = Counter(), set(), 0
-    for path in discover_benign_pcaps(base_dir):
+    for path in discover_benign_pcaps():  # default base_dir="." — the NameError
         full = os.path.join(".", path)
         if not os.path.exists(full):
             continue
