@@ -7,16 +7,16 @@
 
 ## Honest training gate (`logs/honest_training_results.json`)
 
-Measured 2026-09-20 13:46 (writer-local). Operating point: **0.85** (owner: `policy.py`). Promotion gate: **PASSED**.
+Measured 2026-09-27 05:41 (writer-local). Operating point: **0.85** (owner: `policy.py`). Promotion gate: **PASSED**.
 
 | Detector | Holdout TPR | Holdout FPR | Seated |
 |---|---|---|---|
-| Monolith | 91.69% | 0.00% | - |
-| Volumetric Vanguard (rates & floods) | 41.80% | 0.22% | yes |
-| Recon Inquisitor (flags & scans) | 89.62% | 0.00% | yes |
-| Deep-Payload Analyst (entropy & C2) | 63.16% | 20.81% | NO |
+| Monolith | 68.53% | 0.00% | - |
+| Volumetric Vanguard (rates & floods) | 73.77% | 3.11% | NO |
+| Recon Inquisitor (flags & scans) | 41.27% | 0.00% | yes |
+| Deep-Payload Analyst (entropy & C2) | 87.53% | 33.36% | NO |
 
-Throughput: **447.7 evals/sec** (measured, not estimated).
+Throughput: **619.4 evals/sec** (measured, not estimated).
 
 ## Adversarial stress benchmark (`logs/adversarial_stress_results.json`)
 
