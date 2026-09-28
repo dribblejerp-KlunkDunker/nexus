@@ -515,6 +515,12 @@ artifact honestly contains.
   `tools/gen_performance_doc.py` — never edit it by hand; CI fails if the
   document drifts from the measurement artifacts.
 - **`CHANGELOG.md`** tracks the hardening campaign change by change.
+- **`scripts/install-antigravity-ide.sh`** — reusable, idempotent installer for
+  Google's Antigravity IDE (linux-x64): downloads the pinned release, verifies
+  its SHA-256, extracts to `/opt/Antigravity IDE`, links the
+  `antigravity-ide` CLI, and installs a desktop entry. Re-run safe; supports
+  `--version`, `--install-dir`, `--force`, `--uninstall` and
+  `ANTIGRAVITY_*` environment overrides (`--help` for details).
 - Web build: `build_web.bat` (or `npm run build:web`). Tailwind is compiled
   at build time; `app.css` is committed so runtime never needs Node.
   The Tailwind config uses absolute content paths, so it builds correctly
