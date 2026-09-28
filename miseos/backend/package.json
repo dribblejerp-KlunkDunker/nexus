@@ -1,0 +1,18 @@
+{
+  "name": "miseos-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "MiseOS backend: Express + Google Gemini recipe synthesis proxy. Your API key stays on the server.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@google/genai": "^1.0.0",
+    "express": "^5.1.0"
+  }
+}

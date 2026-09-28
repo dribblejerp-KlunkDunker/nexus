@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MiseOS — Pantry → Recipes</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧅</text></svg>" />
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  .chip { transition: all .15s ease; }
+  .chip:hover { transform: translateY(-1px); }
+  .recipe-card { animation: rise .4s ease both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+  .step-num { counter-increment: step; }
+  .step-num::before { content: counter(step) ". "; color: #f59e0b; font-weight: 700; }
+</style>
+</head>
+<body class="bg-stone-950 text-stone-100 min-h-screen">
+
+  <!-- Header -->
+  <header class="border-b border-stone-800 bg-stone-900/60 backdrop-blur sticky top-0 z-10">
+    <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="text-3xl">🧅</span>
+        <div>
+          <h1 class="text-xl font-black tracking-tight">MiseOS</h1>
+          <p class="text-xs text-stone-400">Everything in its place — pantry in, recipes out.</p>
+        </div>
+      </div>
+      <div id="statusPill" class="text-xs px-3 py-1.5 rounded-full border border-stone-700 text-stone-400">
+        checking backend…
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 py-8">
+    <!-- Pantry input -->
+    <section class="bg-stone-900 border border-stone-800 rounded-2xl p-6 shadow-xl">
+      <h2 class="font-bold text-lg mb-1">🥕 What's in your kitchen?</h2>
+      <p class="text-sm text-stone-400 mb-4">Type an ingredient and hit Enter (or click a suggestion).</p>
+
+      <div class="flex gap-2 mb-3">
+        <input id="ingredientInput" type="text" placeholder="e.g. chicken thighs, rice, lemons…"
+          class="flex-1 bg-stone-950 border border-stone-700 rounded-lg px-4 py-3 outline-none focus:border-amber-500 placeholder-stone-600" />
+        <button id="addBtn" class="bg-amber-600 hover:bg-amber-500 text-white font-bold px-5 rounded-lg transition">Add</button>
+      </div>
+
+      <div id="chips" class="flex flex-wrap gap-2 min-h-[2.5rem] mb-4"></div>
+
+      <div class="flex flex-wrap gap-2 mb-5 text-xs" id="quickChips"></div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
+        <label class="text-sm">
+          <span class="text-stone-400 block mb-1">Cuisine direction</span>
+          <select id="cuisine" class="w-full bg-stone-950 border border-stone-700 rounded-lg px-3 py-2 outline-none focus:border-amber-500">
+            <option value="any">Surprise me</option>
+            <option value="italian">Italian</option>
+            <option value="japanese">Japanese</option>
+            <option value="mexican">Mexican</option>
+            <option value="indian">Indian</option>
+            <option value="thai">Thai</option>
+            <option value="french">French</option>
+            <option value="middle eastern">Middle Eastern</option>
+            <option value="southern comfort">Southern comfort</option>
+          </select>
+        </label>
+        <label class="text-sm">
+          <span class="text-stone-400 block mb-1">Dietary constraint</span>
+          <select id="diet" class="w-full bg-stone-950 border border-stone-700 rounded-lg px-3 py-2 outline-none focus:border-amber-500">
+            <option value="none">None</option>
+            <option value="vegetarian">Vegetarian</option>
+            <option value="vegan">Vegan</option>
+            <option value="gluten-free">Gluten-free</option>
+            <option value="dairy-free">Dairy-free</option>
+            <option value="low-carb">Low-carb</option>
+          </select>
+        </label>
+        <label class="text-sm">
+          <span class="text-stone-400 block mb-1">Servings</span>
+          <input id="servings" type="number" min="1" max="12" value="2"
+            class="w-full bg-stone-950 border border-stone-700 rounded-lg px-3 py-2 outline-none focus:border-amber-500" />
+        </label>
+      </div>
+
+      <button id="synthesizeBtn"
+        class="w-full bg-amber-600 hover:bg-amber-500 disabled:opacity-40 disabled:cursor-not-allowed text-white text-lg font-black py-4 rounded-xl transition shadow-lg shadow-amber-900/30">
+        ✨ Synthesize Recipes
+      </button>
+      <p id="errorBox" class="hidden mt-3 text-sm text-red-400 bg-red-950/40 border border-red-900 rounded-lg px-4 py-3"></p>
+    </section>
+
+    <!-- Loading -->
+    <section id="loading" class="hidden mt-8 text-center py-10">
+      <div class="inline-block animate-spin rounded-full h-10 w-10 border-4 border-amber-600 border-t-transparent"></div>
+      <p class="mt-4 text-stone-400 animate-pulse">Tasting combinations… plating ideas…</p>
+    </section>
+
+    <!-- Results -->
+    <section id="results" class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-5"></section>
+  </main>
+
+  <footer class="max-w-5xl mx-auto px-4 py-8 text-center text-xs text-stone-600">
+    MiseOS · your API key never leaves the backend · built with Express + Gemini
+  </footer>
+
+<script>
+(() => {
+  "use strict";
+
+  const ingredients = [];
+  const $ = (id) => document.getElementById(id);
+  const chipsEl = $("chips"), input = $("ingredientInput"), resultsEl = $("results");
+  const btn = $("synthesizeBtn"), loadingEl = $("loading"), errorBox = $("errorBox");
+
+  const QUICK = ["eggs","rice","chicken thighs","pasta","potatoes","onions","garlic","canned tomatoes","chickpeas","spinach","cheese","lemon"];
+  $("quickChips").innerHTML = QUICK.map(q =>
+    `<button class="quick px-3 py-1.5 rounded-full border border-stone-700 hover:border-amber-500 hover:text-amber-400 text-stone-300 chip" data-add="${q}">+ ${q}</button>`
+  ).join("");
+
+  function esc(s) {
+    const d = document.createElement("div");
+    d.textContent = String(s ?? "");
+    return d.innerHTML;
+  }
+
+  function renderChips() {
+    chipsEl.innerHTML = ingredients.length === 0
+      ? `<span class="text-stone-600 text-sm italic px-1 py-2">pantry is empty — add something!</span>`
+      : ingredients.map((ing, i) =>
+          `<button data-del="${i}" title="remove"
+            class="chip px-3 py-1.5 rounded-full bg-amber-600/20 border border-amber-700/50 text-amber-300 text-sm">
+            ${esc(ing)} <span class="text-amber-500/70">×</span>
+          </button>`).join("");
+  }
+
+  function addIngredient(raw) {
+    const v = (raw || "").trim().slice(0, 64);
+    if (!v || ingredients.includes(v.toLowerCase()) || ingredients.length >= 40) return;
+    ingredients.push(v.toLowerCase());
+    renderChips();
+  }
+
+  chipsEl.addEventListener("click", (e) => {
+    const del = e.target.closest("[data-del]");
+    if (del) { ingredients.splice(Number(del.dataset.del), 1); renderChips(); }
+  });
+  $("quickChips").addEventListener("click", (e) => {
+    const add = e.target.closest("[data-add]");
+    if (add) addIngredient(add.dataset.add);
+  });
+  $("addBtn").addEventListener("click", () => { addIngredient(input.value); input.value = ""; input.focus(); });
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") { e.preventDefault(); addIngredient(input.value); input.value = ""; }
+  });
+
+  // Backend status pill
+  fetch("/api/health").then(r => r.json()).then(h => {
+    $("statusPill").textContent = h.geminiConnected ? `● live · ${h.model}` : "● demo mode (no API key)";
+    $("statusPill").className = "text-xs px-3 py-1.5 rounded-full border " +
+      (h.geminiConnected ? "border-emerald-700 text-emerald-400" : "border-amber-700 text-amber-400");
+  }).catch(() => {
+    $("statusPill").textContent = "● backend offline";
+    $("statusPill").className = "text-xs px-3 py-1.5 rounded-full border border-red-800 text-red-400";
+  });
+
+  function setLoading(on) {
+    loadingEl.classList.toggle("hidden", !on);
+    btn.disabled = on;
+    btn.textContent = on ? "⏳ Synthesizing…" : "✨ Synthesize Recipes";
+  }
+
+  function recipeCard(r, idx) {
+    const ing = (r.ingredients || []).map(i =>
+      `<li class="flex justify-between gap-3"><span>${esc(i.item)}</span><span class="text-stone-500">${esc(i.amount)}</span></li>`).join("");
+    const steps = (r.steps || []).map(s => `<li class="step-num pl-1">${esc(s)}</li>`).join("");
+    const tips = (r.tips && r.tips.length)
+      ? `<div class="mt-4 pt-3 border-t border-stone-800"><p class="text-xs font-bold text-amber-500 mb-1">CHEF'S NOTES</p>
+         <ul class="text-xs text-stone-400 space-y-1 list-disc list-inside">${r.tips.map(t => `<li>${esc(t)}</li>`).join("")}</ul></div>`
+      : "";
+    const meta = [r.cuisine, (r.prepMinutes != null ? r.prepMinutes + "m prep" : null),
+      (r.cookMinutes != null ? r.cookMinutes + "m cook" : null),
+      (r.servings != null ? "serves " + r.servings : null)].filter(Boolean).map(esc).join(" · ");
+
+    return `
+    <article class="recipe-card bg-stone-900 border border-stone-800 rounded-2xl overflow-hidden shadow-lg flex flex-col" style="animation-delay:${idx * 90}ms">
+      <div class="bg-gradient-to-br from-amber-700/40 to-stone-900 p-5 border-b border-stone-800">
+        <h3 class="text-lg font-black leading-tight">${esc(r.name)}</h3>
+        <p class="text-xs text-amber-400/90 mt-1">${meta || "&nbsp;"}</p>
+      </div>
+      <div class="p-5 flex-1 flex flex-col">
+        <p class="text-sm text-stone-400 mb-4">${esc(r.description || "")}</p>
+        <p class="text-xs font-bold text-stone-500 mb-2">INGREDIENTS</p>
+        <ul class="text-sm space-y-1.5 mb-4">${ing}</ul>
+        <p class="text-xs font-bold text-stone-500 mb-2">METHOD</p>
+        <ol class="text-sm space-y-2 list-none" style="counter-reset:step">${steps}</ol>
+        ${tips}
+      </div>
+    </article>`;
+  }
+
+  btn.addEventListener("click", async () => {
+    errorBox.classList.add("hidden");
+    if (ingredients.length === 0) {
+      errorBox.textContent = "Add at least one ingredient first.";
+      errorBox.classList.remove("hidden");
+      return;
+    }
+    setLoading(true);
+    resultsEl.innerHTML = "";
+    try {
+      const res = await fetch("/api/synthesize", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ingredients,
+          cuisine: $("cuisine").value,
+          diet: $("diet").value,
+          servings: Number($("servings").value) || 2,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || `Request failed (${res.status})`);
+
+      if (data.demo) {
+        errorBox.textContent = "Demo mode — the backend has no API key, so these are placeholder recipes.";
+        errorBox.classList.remove("hidden");
+      }
+      resultsEl.innerHTML = (data.recipes || []).map(recipeCard).join("");
+      resultsEl.scrollIntoView({ behavior: "smooth", block: "start" });
+    } catch (err) {
+      errorBox.textContent = err.message || "Something went wrong.";
+      errorBox.classList.remove("hidden");
+    } finally {
+      setLoading(false);
+    }
+  });
+
+  renderChips();
+})();
+</script>
+</body>
+</html>
