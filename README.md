@@ -521,6 +521,8 @@ artifact honestly contains.
   `antigravity-ide` CLI, and installs a desktop entry. Re-run safe; supports
   `--version`, `--install-dir`, `--force`, `--uninstall` and
   `ANTIGRAVITY_*` environment overrides (`--help` for details).
+  `docs/ANTIGRAVITY-IDE-VERIFICATION.md` records the headless install/GUI
+  verification (Xvfb methodology, pixel-evidence summary, limitations).
 - Web build: `build_web.bat` (or `npm run build:web`). Tailwind is compiled
   at build time; `app.css` is committed so runtime never needs Node.
   The Tailwind config uses absolute content paths, so it builds correctly
